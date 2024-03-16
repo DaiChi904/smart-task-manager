@@ -1,0 +1,7 @@
+{
+  "name": "Smart-Task-Manager",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
