@@ -36,9 +36,18 @@ function CardAdder() {
   const [inputTitleValue, setInputTitleValue] = useState("");
   const [inputContentValue, setInputContentValue] = useState("");
   const [todos, setTodos] = useState<CardValue[]>([]);
+
+  type generateCardList = () => JSX.Element[];
+  const generateCardList:generateCardList = () => {
+    return todos.map((value) => {
+      return <CardList  todos={value}/>
+    })
+  }
+  
+
     return(
-      <>
-      <CardList todos={todos}/>
+      <div>
+      <div>{generateCardList()}</div>
       
       <form onSubmit={(se) => handleSubmit(se)}>
       <IonCard>
@@ -61,7 +70,7 @@ function CardAdder() {
       </IonCard>
       <input type="submit" value="Add Task" />
       </form>
-      </>
+      </div>
     );
 }
 export default CardAdder;

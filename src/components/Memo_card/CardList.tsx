@@ -3,7 +3,6 @@ import { useState, useRef } from "react";
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 
 type CardValue = {
-    map(arg0: (todos: CardValue) => import("react/jsx-runtime").JSX.Element): unknown;
     id: number;
     cardTitle: string;
     cardContent: string;
@@ -12,8 +11,6 @@ type CardValue = {
 
 function CardList({todos}: {todos:CardValue}) {
     return(
-        <>
-        {todos.map((todos:CardValue) => (
         <div>
             <IonCard>
                 <IonCardHeader>
@@ -26,8 +23,6 @@ function CardList({todos}: {todos:CardValue}) {
                 </IonCardContent>
             </IonCard>
         </div>
-        ))}
-        </>
     );
 }
 
