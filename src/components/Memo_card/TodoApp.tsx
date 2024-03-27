@@ -2,6 +2,8 @@ import { useState, useRef, FormEvent } from "react";
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import CardList from "./CardList";
 
+import "./TodoApp.css"
+
 function TodoApp() {
   type CardValue = {
     id: number;
@@ -11,11 +13,11 @@ function TodoApp() {
   }
 
   // Get input Values of card
-  const handeleTitleChange = (ie: React.ChangeEvent<HTMLInputElement>) => {
+  const handeleTitleChange = (ie: React.ChangeEvent<HTMLTextAreaElement>) => {
     console.log(ie.target.value)
     setInputTitleValue(ie.target.value)
   }
-  const handeleContentChange = (ie: React.ChangeEvent<HTMLInputElement>) => {
+  const handeleContentChange = (ie: React.ChangeEvent<HTMLTextAreaElement>) => {
     console.log(ie.target.value)
     setInputContentValue(ie.target.value)
   }
@@ -29,7 +31,7 @@ function TodoApp() {
       cardContent: inputContentValue,
       checked: false,
     }
-
+    
     setTodos([newTodo, ...todos])
   }
 
@@ -37,6 +39,7 @@ function TodoApp() {
   const [inputContentValue, setInputContentValue] = useState("");
   const [todos, setTodos] = useState<CardValue[]>([]);
 
+  // prevent type error
   type generateCardList = () => JSX.Element[];
   const generateCardList:generateCardList = () => {
     return todos.map((value) => {
@@ -47,28 +50,28 @@ function TodoApp() {
 
     return(
       <div>
-      <div>{generateCardList()}</div>
+      <div className="CardList">{generateCardList()}</div>
       
-      <form onSubmit={(se) => handleSubmit(se)}>
-      <IonCard>
-      <IonCardHeader>
-        <IonCardTitle>
-          <input
-            type="text"
-            placeholder="Type Card Title" 
-            onChange={(ie) => handeleTitleChange(ie)}
-          />
-        </IonCardTitle>
-      </IonCardHeader>
-      <IonCardContent>
-        <input
-          type="text"
-          placeholder="Type Card Details"
-          onChange={(ie) => handeleContentChange(ie)}
-        />
-      </IonCardContent>
-      </IonCard>
-      <input type="submit" value="Add Task" />
+      <form className="NewCard" onSubmit={(se) => handleSubmit(se)}>
+        <IonCard className="Card">
+          <IonCardHeader>
+            <IonCardTitle>
+              <textarea
+                placeholder="Type Card Title" 
+                onChange={(ie) => handeleTitleChange(ie)}
+                id="TitleInput"
+              />
+            </IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <textarea
+              placeholder="Type Card Details"
+              onChange={(ie) => handeleContentChange(ie)}
+              id="ContentInput"
+            />
+          </IonCardContent>
+        </IonCard>
+        <input type="submit" value="Add Task" id="TodoAdd" />
       </form>
       </div>
     );
