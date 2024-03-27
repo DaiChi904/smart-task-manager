@@ -1,5 +1,4 @@
-import CardAdder from "./TodoApp";
-import { useState, useRef } from "react";
+import { useState, useRef, MouseEvent } from "react";
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 
 type CardValue = {
@@ -9,10 +8,22 @@ type CardValue = {
     checked: boolean;
   }
 
+const handleEdit = (edit: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
+    console.log("edit");
+}
+
+const handleDelete = (del: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
+    console.log("del");
+}
+
 function CardList({todos}: {todos:CardValue}) {
     return(
         <div>
-            <IonCard>
+            <IonCard className="Card">
+                <div className="CardMenu">
+                    <button className="CardMenuChild" onClick={(edit) => handleEdit(edit)} >編集</button>
+                    <button className="CardMenuChild" onClick={(del) => handleDelete(del)} >削除</button>
+                </div>
                 <IonCardHeader>
                     <IonCardTitle>
                         <div>{todos.cardTitle}</div>
