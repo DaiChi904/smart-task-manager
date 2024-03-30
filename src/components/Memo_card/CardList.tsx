@@ -1,5 +1,6 @@
 import { useState, useRef, MouseEvent } from "react";
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
+import CardSetuper from "./CardSetuper";
 
 type CardValue = {
     id: number;
@@ -8,29 +9,20 @@ type CardValue = {
     checked: boolean;
   }
 
-const handleEdit = (edit: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
-    console.log("edit");
-}
-
-const handleDelete = (del: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
-    console.log("del");
-}
-
 function CardList({todos}: {todos:CardValue}) {
+    const handlePopup = (ep: MouseEvent<HTMLIonCardElement, globalThis.MouseEvent>) => {
+        <CardSetuper todos={todos} />
+    }
     return(
         <div>
-            <IonCard className="Card">
-                <div className="CardMenu">
-                    <button className="CardMenuChild" onClick={(edit) => handleEdit(edit)} >編集</button>
-                    <button className="CardMenuChild" onClick={(del) => handleDelete(del)} >削除</button>
-                </div>
+            <IonCard className="Card" onClick={(ep) => handlePopup(ep)}>
                 <IonCardHeader>
                     <IonCardTitle>
-                        <div>{todos.cardTitle}</div>
+                        <div id="Title" key={todos.id}>{todos.cardTitle}</div>
                     </IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                    <div>{todos.cardContent}</div>
+                    <div id="Content" key={todos.id}>{todos.cardContent}</div>
                 </IonCardContent>
             </IonCard>
         </div>

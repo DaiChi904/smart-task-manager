@@ -39,7 +39,7 @@ function TodoApp() {
   const [inputContentValue, setInputContentValue] = useState("");
   const [todos, setTodos] = useState<CardValue[]>([]);
 
-  // prevent type error
+  // prevent type error displaying cards
   type generateCardList = () => JSX.Element[];
   const generateCardList:generateCardList = () => {
     return todos.map((value) => {
@@ -50,29 +50,29 @@ function TodoApp() {
 
     return(
       <div>
-      <div className="CardList">{generateCardList()}</div>
+        <div className="CardList">{generateCardList()}</div> {/* From CardList */}
       
-      <form className="NewCard" onSubmit={(se) => handleSubmit(se)}>
-        <IonCard className="Card">
-          <IonCardHeader>
-            <IonCardTitle>
+        <form className="NewCard" onSubmit={(se) => handleSubmit(se)}>
+          <IonCard className="Card">
+            <IonCardHeader>
+              <IonCardTitle>
+                <textarea
+                  placeholder="Type Card Title" 
+                  onChange={(ie) => handeleTitleChange(ie)}
+                  id="TitleInput"
+                />
+              </IonCardTitle>
+            </IonCardHeader>
+            <IonCardContent>
               <textarea
-                placeholder="Type Card Title" 
-                onChange={(ie) => handeleTitleChange(ie)}
-                id="TitleInput"
+                placeholder="Type Card Details"
+                onChange={(ie) => handeleContentChange(ie)}
+                id="ContentInput"
               />
-            </IonCardTitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <textarea
-              placeholder="Type Card Details"
-              onChange={(ie) => handeleContentChange(ie)}
-              id="ContentInput"
-            />
-          </IonCardContent>
-        </IonCard>
-        <input type="submit" value="Add Task" id="TodoAdd" />
-      </form>
+            </IonCardContent>
+          </IonCard>
+          <input type="submit" value="Add Task" id="TodoAdd" />
+        </form>
       </div>
     );
 }
