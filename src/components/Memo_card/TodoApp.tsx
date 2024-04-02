@@ -54,7 +54,7 @@ function TodoApp() {
 
         <div className={showStatus ? "show" : "hidden"}>
           <form onSubmit={(se) => handleSubmit(se)}>
-            <IonCard className="NewCard">
+            <IonCard className="PendingCard">
               <IonCardHeader>
                 <IonCardTitle>
                   <textarea
