@@ -39,18 +39,9 @@ function TodoApp() {
   const [inputContentValue, setInputContentValue] = useState("");
   const [todos, setTodos] = useState<CardValue[]>([]);
 
-  // prevent type error displaying cards
-  type generateCardList = () => JSX.Element[];
-  const generateCardList:generateCardList = () => {
-    return todos.map((value) => {
-      return <CardList  todos={value}/>
-    })
-  }
-  
-
     return(
       <div>
-        <div className="CardList">{generateCardList()}</div> {/* From CardList */}
+        <CardList todos={todos} />
       
         <form className="NewCard" onSubmit={(se) => handleSubmit(se)}>
           <IonCard className="Card">

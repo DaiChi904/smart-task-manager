@@ -2,29 +2,30 @@ import { useState, useRef, MouseEvent } from "react";
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import CardSetuper from "./CardSetuper";
 
-type CardValue = {
-    id: number;
-    cardTitle: string;
-    cardContent: string;
-    checked: boolean;
+type CardProps = {
+    todos:{
+        id: number;
+        cardTitle: string;
+        cardContent: string;
+        checked: boolean;
+    }[]
   }
 
-function CardList({todos}: {todos:CardValue}) {
-    const handlePopup = (ep: MouseEvent<HTMLIonCardElement, globalThis.MouseEvent>) => {
-        <CardSetuper todos={todos} />
-    }
+function CardList(todos: CardProps) {
     return(
-        <div>
-            <IonCard className="Card" onClick={(ep) => handlePopup(ep)}>
-                <IonCardHeader>
-                    <IonCardTitle>
-                        <div id="Title" key={todos.id}>{todos.cardTitle}</div>
-                    </IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                    <div id="Content" key={todos.id}>{todos.cardContent}</div>
-                </IonCardContent>
-            </IonCard>
+        <div className="CardList">
+            {todos.todos.map((todos) => (
+                <IonCard className="Card">
+                    <IonCardHeader>
+                        <IonCardTitle>
+                            <div id="Title" key={todos.id}>{todos.cardTitle}</div>
+                        </IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                        <div id="Content" key={todos.id}>{todos.cardContent}</div>
+                    </IonCardContent>
+                </IonCard>
+            ))}
         </div>
     );
 }
