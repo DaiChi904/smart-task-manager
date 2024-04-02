@@ -1,6 +1,5 @@
 import { useState, useRef, MouseEvent } from "react";
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
-import CardSetuper from "./CardSetuper";
 
 type CardProps = {
     todos:{
