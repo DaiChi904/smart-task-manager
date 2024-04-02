@@ -3,6 +3,7 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle }
 import CardList from "./CardList";
 
 import "./TodoApp.css"
+import { alarm } from "ionicons/icons";
 
 function TodoApp() {
   type CardValue = {
@@ -29,19 +30,36 @@ function TodoApp() {
   }
 
   // Create new Todo
-  const handleSubmit = (add: FormEvent<HTMLFormElement>) => {
-    add.preventDefault();
-    const newTodo: CardValue = {
-      id: todos.length,
-      cardTitle: inputTitleValue,
-      cardContent: inputContentValue,
-      checked: false,
-    };
-    // Creae new Todo array
-    setTodos([newTodo, ...todos]);
-    // Hide todo input field
+  const handleAdd = (add: { preventDefault: () => void; }) => {
+    // Cancel action if more than one input field is empty. 
+    if (inputTitleValue === "" || inputContentValue === "") {
+      setShowStatus(false);
+      // Initialize inputTitleValue and inputContentValue
+      setInputTitleValue("");
+      setInputContentValue("");
+      alert("Your action has canceled due to lack of the title or the content.")
+      return;
+    } else {
+      add.preventDefault();
+      const newTodo: CardValue = {
+        id: todos.length,
+        cardTitle: inputTitleValue,
+        cardContent: inputContentValue,
+        checked: false,
+      };
+      // Creae new Todo array
+      setTodos([newTodo, ...todos]);
+      // Hide todo input field
+      setShowStatus(false);
+      // Initialize inputTitleValue and inputContentValue
+      setInputTitleValue("");
+      setInputContentValue("");
+    }
+  }
+
+  // Cancel adding Todo
+  const handleCancel = () => {
     setShowStatus(false);
-    // Initialize inputTitleValue and inputContentValue
     setInputTitleValue("");
     setInputContentValue("");
   }
@@ -55,7 +73,6 @@ function TodoApp() {
         <CardList todos={todos} />
 
         <div className={showStatus ? "show" : "hidden"}>
-          <form onSubmit={(add) => handleSubmit(add)}>
             <IonCard className="PendingCard">
               <IonCardHeader>
                 <IonCardTitle>
@@ -75,12 +92,15 @@ function TodoApp() {
                   id="ContentInput"
                 />
               </IonCardContent>
-              <input type="submit" value="Add" id="AddBtn"/>
+              <div className="CardMenu">
+                <button id="AddBtn" className="CardMenuChild" onClick={handleAdd}><b>Add</b></button>
+                <button id="CancelBtn" className="CardMenuChild" onClick={handleCancel}><b>Cancel</b></button>
+              </div>
             </IonCard>
-          </form>
         </div>
         <button id="TodoAdd" onClick={handeleshow}><b>Add Task</b></button>
       </div>
     );
 }
+
 export default TodoApp;
