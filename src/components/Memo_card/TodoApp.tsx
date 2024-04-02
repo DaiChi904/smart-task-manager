@@ -19,29 +19,31 @@ function TodoApp() {
   }
 
   // Get input Values of card
-  const handeleTitleChange = (ie: React.ChangeEvent<HTMLTextAreaElement>) => {
-    console.log(ie.target.value)
-    setInputTitleValue(ie.target.value)
+  const handeleTitleChange = (input: React.ChangeEvent<HTMLTextAreaElement>) => {
+    console.log(input.target.value)
+    setInputTitleValue(input.target.value)
   }
-  const handeleContentChange = (ie: React.ChangeEvent<HTMLTextAreaElement>) => {
-    console.log(ie.target.value)
-    setInputContentValue(ie.target.value)
+  const handeleContentChange = (input: React.ChangeEvent<HTMLTextAreaElement>) => {
+    console.log(input.target.value)
+    setInputContentValue(input.target.value)
   }
 
   // Create new Todo
-  const handleSubmit = (se: FormEvent<HTMLFormElement>) => {
-    se.preventDefault();
+  const handleSubmit = (add: FormEvent<HTMLFormElement>) => {
+    add.preventDefault();
     const newTodo: CardValue = {
       id: todos.length,
       cardTitle: inputTitleValue,
       cardContent: inputContentValue,
       checked: false,
-    }
-    
-    setTodos([newTodo, ...todos])
-
-    //Hide todo input field
+    };
+    // Creae new Todo array
+    setTodos([newTodo, ...todos]);
+    // Hide todo input field
     setShowStatus(false);
+    // Initialize inputTitleValue and inputContentValue
+    setInputTitleValue("");
+    setInputContentValue("");
   }
 
   const [inputTitleValue, setInputTitleValue] = useState("");
@@ -53,13 +55,14 @@ function TodoApp() {
         <CardList todos={todos} />
 
         <div className={showStatus ? "show" : "hidden"}>
-          <form onSubmit={(se) => handleSubmit(se)}>
+          <form onSubmit={(add) => handleSubmit(add)}>
             <IonCard className="PendingCard">
               <IonCardHeader>
                 <IonCardTitle>
                   <textarea
                     placeholder="Type Card Title" 
-                    onChange={(ie) => handeleTitleChange(ie)}
+                    value={inputTitleValue}
+                    onChange={(input) => handeleTitleChange(input)}
                     id="TitleInput"
                   />
                 </IonCardTitle>
@@ -67,7 +70,8 @@ function TodoApp() {
               <IonCardContent>
                 <textarea
                   placeholder="Type Card Details"
-                  onChange={(ie) => handeleContentChange(ie)}
+                  value={inputContentValue}
+                  onChange={(input) => handeleContentChange(input)}
                   id="ContentInput"
                 />
               </IonCardContent>
