@@ -69,7 +69,7 @@ function CardList() {
           return pendingTodosArray;
         };
       });
-      // Significant bug exist. It is needed to investigate.
+      // Significant bug exist. It is needed to investigate. Maybe it is because of id is set by todos(array) length. It needs completely unique id.
       TodosArray.setTodos([...pendingTodos]);
       setShowStatus(false);
     }
