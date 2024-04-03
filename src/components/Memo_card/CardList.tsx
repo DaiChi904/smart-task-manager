@@ -1,22 +1,31 @@
 import { useState, useContext, useRef, MouseEvent, SetStateAction } from "react";
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 
-import { TodosContext } from "./TodoApp";
+import { CardValue, TodosContext } from "./TodoApp";
+
+type CardProps = {
+    todos:{
+        id: number;
+        cardTitle: string;
+        cardContent: string;
+        checked: boolean;
+    }[]
+  }
 
 function CardList() {
   const TodosArray = useContext(TodosContext);
     // Get input Values of card
     const handeleTitleChange = (edit: React.ChangeEvent<HTMLTextAreaElement>) => {
-        console.log(edit.target.value)
         setEditTitleValue(edit.target.value)
     }
     const handeleContentChange = (edit: React.ChangeEvent<HTMLTextAreaElement>) => {
-        console.log(edit.target.value)
         setEditContentValue(edit.target.value)
     }
 
+    // Set values related to editing cards
     const [editTitleValue, setEditTitleValue] = useState("");
     const [editContentValue, setEditContentValue] = useState("");
+    const [editingCardID, setEditingCardID] = useState<number>();
 
     const [showStatus, setShowStatus] = useState(false) 
     const handleEdit = (id: number, cardTitle: string, cardContent: string) => {
@@ -24,10 +33,28 @@ function CardList() {
         setShowStatus(true);
         setEditTitleValue(cardTitle);
         setEditContentValue(cardContent);
+        setEditingCardID(id);
     }
 
     const handleConfirmEdit = () => {
         setShowStatus(false);
+        // Create new edited card
+        const newTodo: CardValue = {
+          id: TodosArray.todos.length,
+          cardTitle: editTitleValue,
+          cardContent: editContentValue,
+          checked: false,
+        };
+        // Delete the card which is pre-edited
+        const pendingTodos = TodosArray.todos.filter((pendingTodosArray) => {
+          if (pendingTodosArray.id === editingCardID) {
+            return false
+          } else {
+            return pendingTodosArray;
+          };
+        });
+        // Create editied todos array
+        TodosArray.setTodos([newTodo, ...pendingTodos]);
     }
 
     const handleCancelEdit = () => {
@@ -35,7 +62,16 @@ function CardList() {
     }
 
     const handleDelete = () => {
-
+      const pendingTodos = TodosArray.todos.filter((pendingTodosArray) => {
+        if (pendingTodosArray.id === editingCardID) {
+          return false
+        } else {
+          return pendingTodosArray;
+        };
+      });
+      // Significant bug exist. It is needed to investigate.
+      TodosArray.setTodos([...pendingTodos]);
+      setShowStatus(false);
     }
 
     return(

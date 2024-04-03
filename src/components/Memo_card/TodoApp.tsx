@@ -31,11 +31,9 @@ function TodoApp() {
 
   // Get input Values of card
   const handeleTitleChange = (input: React.ChangeEvent<HTMLTextAreaElement>) => {
-    console.log(input.target.value)
     setInputTitleValue(input.target.value)
   }
   const handeleContentChange = (input: React.ChangeEvent<HTMLTextAreaElement>) => {
-    console.log(input.target.value)
     setInputContentValue(input.target.value)
   }
 
