@@ -1,18 +1,28 @@
-import { useState, useRef, FormEvent } from "react";
+import { useState, createContext, useRef, FormEvent } from "react";
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import CardList from "./CardList";
 
 import "./TodoApp.css"
-import { alarm } from "ionicons/icons";
+
+// The code which just only below might not need to export.
+export type CardValue = {
+  id: number;
+  cardTitle: string;
+  cardContent: string;
+  checked: boolean;
+}
+
+export type TodosContextType = {
+  todos: CardValue[],
+  setTodos: React.Dispatch<React.SetStateAction<CardValue[]>>
+}
+
+export const TodosContext = createContext<TodosContextType>({
+  todos: [],
+  setTodos: () => {},
+})
 
 function TodoApp() {
-  type CardValue = {
-    id: number;
-    cardTitle: string;
-    cardContent: string;
-    checked: boolean;
-  }
-
   // Show or hide todo input field by pressing AddTask
   const [showStatus, setShowStatus] = useState(false) 
   const handeleshow = () => {
@@ -67,10 +77,13 @@ function TodoApp() {
   const [inputTitleValue, setInputTitleValue] = useState("");
   const [inputContentValue, setInputContentValue] = useState("");
   const [todos, setTodos] = useState<CardValue[]>([]);
+  
 
     return(
       <div className="Container">
-        <CardList todos={todos} />
+        <TodosContext.Provider value={{todos, setTodos}}>
+          <CardList />
+        </TodosContext.Provider>
 
         <div className={showStatus ? "show" : "hidden"}>
             <IonCard className="PendingCard">

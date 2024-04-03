@@ -1,16 +1,10 @@
-import { useState, useRef, MouseEvent, SetStateAction } from "react";
+import { useState, useContext, useRef, MouseEvent, SetStateAction } from "react";
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 
-type CardProps = {
-    todos:{
-        id: number;
-        cardTitle: string;
-        cardContent: string;
-        checked: boolean;
-    }[]
-  }
+import { TodosContext } from "./TodoApp";
 
-function CardList(todos: CardProps) {
+function CardList() {
+  const TodosArray = useContext(TodosContext);
     // Get input Values of card
     const handeleTitleChange = (edit: React.ChangeEvent<HTMLTextAreaElement>) => {
         console.log(edit.target.value)
@@ -47,7 +41,7 @@ function CardList(todos: CardProps) {
     return(
         <div className="Container">
             <div className="CardList">
-                {todos.todos.map((todos) => (
+                {TodosArray.todos.map((todos) => (
                     <IonCard className="Card" onClick={() => handleEdit(todos.id, todos.cardTitle, todos.cardContent)}>
                         <IonCardHeader>
                             <IonCardTitle>
