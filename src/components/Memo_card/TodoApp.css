@@ -32,14 +32,14 @@
 }
 
 #TitleInput {
-    width: 400px;
+    width: 550px;
     height: 40px;
     resize: none;
 }
 
 #ContentInput {
-    width: 400px;
-    height: 150px;
+    width: 550px;
+    height: 200px;
     resize: none;
 }
 
@@ -55,18 +55,29 @@
     resize: none;
 }
 
-.PendingCard {
+.CreateTodoContainer {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     position: fixed;
-    width: 450px;
-    height: 300px;
-    align-items: center;
-    justify-content: center;
-    /* By doing below, it can display input field in ceneter of the window. But I don't know why. */
     top: 50%;
     left: 50%;
     transform: translateY(-50%) translateX(-50%);
+}
+
+.SetTodoDueDateField {
+    display: flex;
+}
+
+.PendingCard {
+    display: flex;
+    flex-direction: column;
+    
+    width: 600px;
+    height: 400px;
+    align-items: center;
+    justify-content: center;
+    /* By doing below, it can display input field in ceneter of the window. But I don't know why. */
+
 }
 
 .CardMenu {
