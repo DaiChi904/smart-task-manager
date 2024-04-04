@@ -1,3 +1,5 @@
+// Core part of this App. Create new todos and displying Todo List is main role of this Compornent. Additionaly, the core content of Todos and setTodos, which is this App, is difined in this compornent as a TodosContext.
+
 import { useState, createContext, useRef, FormEvent } from "react";
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import CardList from "./CardList";
