@@ -5,8 +5,10 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, 
 import { IonDatetime, IonDatetimeButton } from '@ionic/react';
 import { IonButton, IonButtons } from '@ionic/react'
 
-import { CardValue, TodosContext } from "./TodoApp";
+import { CardValue } from "./TodoApp";
 import { notificationsOutline } from "ionicons/icons";
+import { useAtom } from "jotai";
+import { todosAtom } from "./TodoApp";
 
 // This type definition is needless at this time, but leaveing it unchanged just in case.
 type CardProps = {
@@ -19,8 +21,6 @@ type CardProps = {
 }
 
 function CardList() {
-  const TodosArray = useContext(TodosContext);
-   // Get input Values of card
   const handeleTitleChange = (edit: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditTitleValue(edit.target.value)
   }
@@ -39,7 +39,7 @@ function CardList() {
   // Get input value of card due date calender.
   const editDueDate = useRef<null | HTMLIonDatetimeElement>(null);
   // Set due-date from calender.
-  const EditConfirm = () => {
+  const EditDateConfirm = () => {
     // Change the state of IonDatetime Compornent
     editDueDate.current?.confirm();
 
@@ -47,20 +47,21 @@ function CardList() {
     setEditTodoDueDate(editDate);
     setTodoDateSetFieldShowStatus(false);
   };
-  const EditClear = () => {
+  const EditDateClear = () => {
     // Change the state of IonDatetime Compornent
     editDueDate.current?.reset();
 
     setEditTodoDueDate(null);
     setTodoDateSetFieldShowStatus(false);
   }
-  const EditCancel = () => {
+  const EditDateCancel = () => {
     // Change the state of IonDatetime Compornent
     editDueDate.current?.cancel();
     
     setTodoDateSetFieldShowStatus(false);
   }
 
+  const [todos, setTodos] = useAtom(todosAtom)
   // Set values related to editing cards
   const [editTitleValue, setEditTitleValue] = useState("");
   const [editContentValue, setEditContentValue] = useState("");
@@ -72,7 +73,7 @@ function CardList() {
   const [todoDateSetFieldShowStatus, setTodoDateSetFieldShowStatus] = useState(false);
 
   // !Important: The type of dueDate should be fixed.
-  const handleEdit = (id: number, cardTitle: string, cardContent: string, dueDate: string) => {
+  const handleEdit = (id: number, cardTitle: string, cardContent: string, dueDate: null | string | string[] | undefined) => {
     alert("You clicked card");
     setShowStatus(true);
     setEditTitleValue(cardTitle);
@@ -85,22 +86,22 @@ function CardList() {
     setShowStatus(false);
     // Create new edited card
     const newTodo: CardValue = {
-      id: TodosArray.todos.length,
+      id: todos.length,
       cardTitle: editTitleValue,
       cardContent: editContentValue,
       checked: false,
       dueDate: editTodoDueDate,
     };
     // Delete the card which is pre-edited
-    const pendingTodos = TodosArray.todos.filter((pendingTodosArray) => {
-      if (pendingTodosArray.id === editingCardID) {
+    const pendingTodos = todos.filter((pendingtodos) => {
+      if (pendingtodos.id === editingCardID) {
         return false
       } else {
-        return pendingTodosArray;
+        return pendingtodos;
       };
     });
     // Create editied todos array
-    TodosArray.setTodos([newTodo, ...pendingTodos]);
+    setTodos([newTodo, ...pendingTodos]);
   }
 
   const handleCancelEdit = () => {
@@ -108,22 +109,22 @@ function CardList() {
   }
 
   const handleDelete = () => {
-    const pendingTodos = TodosArray.todos.filter((pendingTodosArray) => {
-      if (pendingTodosArray.id === editingCardID) {
+    const pendingTodos = todos.filter((pendingtodos) => {
+      if (pendingtodos.id === editingCardID) {
         return false
       } else {
-        return pendingTodosArray;
+        return pendingtodos;
       };
     });
     // Significant bug exist. It is needed to investigate. Maybe it is because of id is set by todos(array) length. It needs completely unique id.
-    TodosArray.setTodos([...pendingTodos]);
+    setTodos([...pendingTodos]);
     setShowStatus(false);
   }
   
   return(
     <div className="Container">
       <div className="CardList">
-        {TodosArray.todos.map((todos) => (
+        {todos.map((todos) => (
           <IonCard className="Card" onClick={() => handleEdit(todos.id, todos.cardTitle, todos.cardContent, todos.dueDate)}>
             <IonCardHeader>
               <IonCardTitle>
@@ -169,9 +170,9 @@ function CardList() {
             <div className="SetTodoDueDateField">
               <IonDatetime ref={editDueDate}>
                 <IonButtons slot="buttons">
-                  <IonButton color="primary" onClick={EditConfirm}>Set</IonButton>
-                  <IonButton color="primary" onClick={EditClear}>clear</IonButton>
-                  <IonButton color="primary" onClick={EditCancel}>Cancel</IonButton>
+                  <IonButton color="primary" onClick={EditDateConfirm}>Set</IonButton>
+                  <IonButton color="primary" onClick={EditDateClear}>clear</IonButton>
+                  <IonButton color="primary" onClick={EditDateCancel}>Cancel</IonButton>
                 </IonButtons>
               </IonDatetime>
             </div>

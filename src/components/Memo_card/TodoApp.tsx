@@ -9,25 +9,18 @@ import CardList from "./CardList";
 import "./TodoApp.css"
 
 import { notificationsOutline } from 'ionicons/icons';
+import { atom, useAtom } from "jotai";
 
-// The code which just only below might not need to "export".
+
 export type CardValue = {
   id: number;
   cardTitle: string;
   cardContent: string;
   checked: boolean;
-  dueDate: any;
+  dueDate: null | string | string[] | undefined;
 }
+export const todosAtom = atom<CardValue[]>([])
 
-export type TodosContextType = {
-  todos: CardValue[],
-  setTodos: React.Dispatch<React.SetStateAction<CardValue[]>>
-}
-
-export const TodosContext = createContext<TodosContextType>({
-  todos: [],
-  setTodos: () => {},
-})
 
 function TodoApp() {
   // States which are related to show or hide input field by pressing paticular elements.
@@ -58,18 +51,18 @@ function TodoApp() {
   // Get input value of card due date calender.
   const dueDate = useRef<null | HTMLIonDatetimeElement>(null);
   // Set due-date from calender.
-  const Confirm = () => {
+  const DateConfirm = () => {
     dueDate.current?.confirm();
     const Date = dueDate.current?.value;
     setTodoDueDate(Date);
     setTodoDateSetFieldShowStatus(false);
   };
-  const Clear = () => {
+  const DateClear = () => {
     dueDate.current?.reset();
     setTodoDueDate(null);
     setTodoDateSetFieldShowStatus(false);
   }
-  const Cancel = () => {
+  const DateCancel = () => {
     dueDate.current?.cancel();
     setTodoDateSetFieldShowStatus(false);
   }
@@ -97,30 +90,31 @@ function TodoApp() {
       setTodos([newTodo, ...todos]);
       // Hide todo input field
       setTodoInputFieldShowStatus(false);
-      // Initialize inputTitleValue and inputContentValue
+      // Initialize inputValues
       setInputTitleValue("");
       setInputContentValue("");
+      setTodoDueDate(null);
     }
   }
 
   // Cancel adding Todo
   const handleCancel = () => {
     setTodoInputFieldShowStatus(false);
-    // Initialize inputTitleValue and inputContentValue
+    // Initialize inputValues
     setInputTitleValue("");
     setInputContentValue("");
+    setTodoDueDate(null);
   }
 
   const [inputTitleValue, setInputTitleValue] = useState("");
   const [inputContentValue, setInputContentValue] = useState("");
   const [todoDueDate, setTodoDueDate] = useState<null | string | string[] | undefined>(null);
-  const [todos, setTodos] = useState<CardValue[]>([]);
+  const [todos, setTodos] = useAtom(todosAtom);
 
   return(
     <div className="Container">
-      <TodosContext.Provider value={{todos, setTodos}}>
+
         <CardList />
-      </TodosContext.Provider>
 
       <div className={todoInputFieldShowStatus ? "show" : "hidden"}>
         <div className="CreateTodoContainer">
@@ -153,9 +147,9 @@ function TodoApp() {
             <div className="SetTodoDueDateField">
               <IonDatetime ref={dueDate}>
                 <IonButtons slot="buttons">
-                  <IonButton color="primary" onClick={Confirm}>Set</IonButton>
-                  <IonButton color="primary" onClick={Clear}>clear</IonButton>
-                  <IonButton color="primary" onClick={Cancel}>Cancel</IonButton>
+                  <IonButton color="primary" onClick={DateConfirm}>Set</IonButton>
+                  <IonButton color="primary" onClick={DateClear}>clear</IonButton>
+                  <IonButton color="primary" onClick={DateCancel}>Cancel</IonButton>
                 </IonButtons>
               </IonDatetime>
             </div>

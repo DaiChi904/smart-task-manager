@@ -2,12 +2,13 @@
 
 import { useContext } from 'react';
 import { IonDatetime } from '@ionic/react';
-import { TodosContext } from '../Memo_card/TodoApp';
+import { todosAtom } from '../Memo_card/TodoApp';
+import { useAtom } from 'jotai';
 
 function Calender() {
-    const TodosArray = useContext(TodosContext);
+    const [todos, setTodos] = useAtom(todosAtom);
     const handleConsoleLog = () => {
-        console.log(TodosArray.todos);
+        console.log(todos);
     }
     return (
         <>
