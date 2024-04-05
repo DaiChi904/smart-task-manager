@@ -76,7 +76,7 @@ function TodoApp() {
 
   // Create new Todo
   const handleAdd = (add: { preventDefault: () => void; }) => {
-    // Cancel action if more than one input field is empty. 
+    // Cancel action if more than one text input field is empty. 
     if (inputTitleValue === "" || inputContentValue === "") {
       setTodoInputFieldShowStatus(false);
       // Initialize inputTitleValue and inputContentValue
@@ -115,6 +115,7 @@ function TodoApp() {
   const [inputContentValue, setInputContentValue] = useState("");
   const [todoDueDate, setTodoDueDate] = useState<null | string | string[] | undefined>(null);
   const [todos, setTodos] = useState<CardValue[]>([]);
+
   return(
     <div className="Container">
       <TodosContext.Provider value={{todos, setTodos}}>

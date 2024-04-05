@@ -119,7 +119,7 @@ function CardList() {
     TodosArray.setTodos([...pendingTodos]);
     setShowStatus(false);
   }
-
+  
   return(
     <div className="Container">
       <div className="CardList">

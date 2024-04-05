@@ -3,13 +3,16 @@
 import { useContext } from 'react';
 import { IonDatetime } from '@ionic/react';
 import { TodosContext } from '../Memo_card/TodoApp';
+
 function Calender() {
-    const TodosArray = useContext(TodosContext)
+    const TodosArray = useContext(TodosContext);
+    const handleConsoleLog = () => {
+        console.log(TodosArray.todos);
+    }
     return (
-    <IonDatetime
-        presentation = "date"
-        
-    ></IonDatetime>
+        <>
+            <button onClick={handleConsoleLog}>ボタン</button>
+        </>
     );
 }
 
