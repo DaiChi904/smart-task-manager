@@ -39,14 +39,25 @@ function CardList() {
   // Get input value of card due date calender.
   const editDueDate = useRef<null | HTMLIonDatetimeElement>(null);
   // Set due-date from calender.
-  const confirm = () => {
+  const EditConfirm = () => {
+    // Change the state of IonDatetime Compornent
     editDueDate.current?.confirm();
+
     const editDate = editDueDate.current?.value;
     setEditTodoDueDate(editDate);
     setTodoDateSetFieldShowStatus(false);
   };
+  const EditClear = () => {
+    // Change the state of IonDatetime Compornent
+    editDueDate.current?.reset();
 
-  const cancel = () => {
+    setEditTodoDueDate(null);
+    setTodoDateSetFieldShowStatus(false);
+  }
+  const EditCancel = () => {
+    // Change the state of IonDatetime Compornent
+    editDueDate.current?.cancel();
+    
     setTodoDateSetFieldShowStatus(false);
   }
 
@@ -158,8 +169,9 @@ function CardList() {
             <div className="SetTodoDueDateField">
               <IonDatetime ref={editDueDate}>
                 <IonButtons slot="buttons">
-                  <IonButton color="primary" onClick={confirm}>Set</IonButton>
-                  <IonButton color="primary" onClick={cancel}>Cancel</IonButton>
+                  <IonButton color="primary" onClick={EditConfirm}>Set</IonButton>
+                  <IonButton color="primary" onClick={EditClear}>clear</IonButton>
+                  <IonButton color="primary" onClick={EditCancel}>Cancel</IonButton>
                 </IonButtons>
               </IonDatetime>
             </div>

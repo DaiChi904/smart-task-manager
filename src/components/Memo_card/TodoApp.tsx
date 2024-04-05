@@ -58,14 +58,19 @@ function TodoApp() {
   // Get input value of card due date calender.
   const dueDate = useRef<null | HTMLIonDatetimeElement>(null);
   // Set due-date from calender.
-  const confirm = () => {
+  const Confirm = () => {
     dueDate.current?.confirm();
     const Date = dueDate.current?.value;
     setTodoDueDate(Date);
     setTodoDateSetFieldShowStatus(false);
   };
-
-  const cancel = () => {
+  const Clear = () => {
+    dueDate.current?.reset();
+    setTodoDueDate(null);
+    setTodoDateSetFieldShowStatus(false);
+  }
+  const Cancel = () => {
+    dueDate.current?.cancel();
     setTodoDateSetFieldShowStatus(false);
   }
 
@@ -147,8 +152,9 @@ function TodoApp() {
             <div className="SetTodoDueDateField">
               <IonDatetime ref={dueDate}>
                 <IonButtons slot="buttons">
-                  <IonButton color="primary" onClick={confirm}>Set</IonButton>
-                  <IonButton color="primary" onClick={cancel}>Cancel</IonButton>
+                  <IonButton color="primary" onClick={Confirm}>Set</IonButton>
+                  <IonButton color="primary" onClick={Clear}>clear</IonButton>
+                  <IonButton color="primary" onClick={Cancel}>Cancel</IonButton>
                 </IonButtons>
               </IonDatetime>
             </div>
