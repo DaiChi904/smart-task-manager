@@ -1,0 +1,42 @@
+#TodosDisplayerContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#TodosLeftDisplayer {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+#TodosRightDisplayer {
+    display: flex;
+    flex-direction: column;
+}
+
+#Calendar-Container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.Calendar-DateBox {
+    display: flex;
+    flex-direction: column;
+    width: calc(100%/7);
+    height: 50px;
+    border: solid 1px;
+    font-size: 25px;
+    justify-content: center;
+    align-items: center;
+}
+
+.Calendar-Children {
+    display: flex;
+    flex-direction: column;
+    width: calc(100%/7);
+    height: 100px;
+    border: solid 1px;
+}
