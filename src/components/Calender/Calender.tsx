@@ -48,8 +48,49 @@ const leapYearLastDayArray: {[key: number]: number} = {
     12: 31,
 }
 
+let dateOfToday = new Date( 2024, 7, 4);
+
+function firstDateInfoGeter(yearOfToday:number, monthOfToday:number) {
+    const firstDate = new Date(yearOfToday, monthOfToday, 1);
+    return firstDate;
+}
+
+function lastDateInfoGeter(yearOfToday:number, monthOfToday:number) {
+    const lastDate = new Date(yearOfToday, monthOfToday, commonYearLastDayArray[monthOfToday + 1]);
+    return lastDate;
+}
+
+function calendarAdjuster() {
+
+}
+
+function dateBacker(yearOfToday:number, monthOfToday:number) {
+    if (monthOfToday === 0) {
+        const changedYearNum: number = yearOfToday -1;
+        const changedMonthNum: number = 11;
+        const backedDate = new Date(changedYearNum, changedMonthNum);
+        return backedDate;
+    } else {
+        const changedMonthNum: number = monthOfToday - 1;
+        const backedDate = new Date(yearOfToday, changedMonthNum);
+        return backedDate;
+    }
+}
+
+function dateAdvancer(yearOfToday:number, monthOfToday:number) {
+    if (monthOfToday === 11) {
+        const changedYearNum: number = yearOfToday + 1;
+        const changedMonthNum: number = 0;
+        const advancedDate = new Date(changedYearNum, changedMonthNum);
+        return advancedDate;
+    } else {
+        const changedMonthNum: number = monthOfToday + 1;
+        const advancedDate = new Date(yearOfToday, changedMonthNum);
+        return advancedDate;
+    }
+}
+
 function Calender() {
-    const [update,setUpdata]=useState<boolean>(false)
 
     type dateArrayType = {
         year: number,
@@ -65,17 +106,10 @@ function Calender() {
     const [dateArray, setDateArray] = useState<dateArrayType[]>([])
     const [afterDateArray, setAfterDateArray] = useState<dateArrayType[]>([])
     
-    // Info about before date at this time.
-    const beforeDate = new Date();
-    const beforeYear: number = beforeDate.getFullYear() - 1;
-    const beforeMonth: number = beforeDate.getMonth();
-    const beforeDay: number = beforeDate.getDate() - 1;
-    const beforeDayOfWeek: number = beforeDate.getDay() - 1;
-    const beforeHour: number = beforeDate.getHours() - 1;
-    const beforeMinite: number = beforeDate.getMinutes() - 1;
+    
 
     // Info about date at this time.
-    const dateOfToday = new Date();
+    //const dateOfToday = new Date();
     const yearOfToday: number = dateOfToday.getFullYear();
     const monthOfToday: number = dateOfToday.getMonth();
     const dayOfToday: number = dateOfToday.getDate();
@@ -83,18 +117,23 @@ function Calender() {
     const hourOfToday: number = dateOfToday.getHours();
     const miniteOfToday: number = dateOfToday.getMinutes();
 
+    const newFirstDate = firstDateInfoGeter(yearOfToday, monthOfToday);
+    const dayOfWeekOfNewFirstDate: number = newFirstDate.getDay();
+    const newLastDate = lastDateInfoGeter(yearOfToday, monthOfToday);
+    const dayOfWeekOfNewLastDate: number = newLastDate.getDay();
+
     // Info about before date at this time.
-    const nextDate = new Date();
-    const nextYear: number = nextDate.getFullYear() - 1;
-    const nextMonth: number = nextDate.getMonth();
-    const nextDay: number = nextDate.getDate() - 1;
-    const nextDayOfWeek: number = nextDate.getDay() - 1;
-    const nextHour: number = nextDate.getHours() - 1;
-    const nextMinite: number = nextDate.getMinutes() - 1;
+    const newBackedDate = dateBacker(yearOfToday, monthOfToday);
+    const beforeMonth = newBackedDate.getMonth();
+
+    // Info about next date at this time.
+    const newAdvancedDate = dateAdvancer(yearOfToday, monthOfToday);
+    const nextMonth = newAdvancedDate.getMonth();
+
     useEffect(() => {
-        const beforeDateArray: dateArrayType[] = []
-        const newDateArray: dateArrayType[] = []
-        const afterDateArray: dateArrayType[] = []
+        const beforeDateArray: dateArrayType[] = [];
+        const newDateArray: dateArrayType[] = [];
+        const afterDateArray: dateArrayType[] = [];
 
         for (let i:number = 1; i <= commonYearLastDayArray[monthOfToday + 1]; i++) {
             const dateOfNewDate = new Date(yearOfToday, monthOfToday, i);
@@ -119,7 +158,7 @@ function Calender() {
             }
         }
         setDateArray([...newDateArray])
-        for (let bi:number = commonYearLastDayArray[beforeMonth]; bi >= commonYearLastDayArray[beforeMonth] + 1; bi--) {
+        for (let bi:number = commonYearLastDayArray[beforeMonth + 1]; bi > commonYearLastDayArray[beforeMonth + 1] - dayOfWeekOfNewFirstDate; bi--) {
             const newDate: dateArrayType = {
                 year: yearOfToday,
                 month: monthOfToday,
@@ -129,7 +168,7 @@ function Calender() {
             beforeDateArray.unshift(newDate);
         }
         setBeforeDateArray([...beforeDateArray])
-        for (let ai:number = 1; ai <= commonYearLastDayArray[nextMonth] - 20 - dayOfWeekOfToday; ai++) {
+        for (let ai:number = 1; ai <= 6 - dayOfWeekOfNewLastDate; ai++) {
             const newDate: dateArrayType = {
                 year: yearOfToday,
                 month: monthOfToday,
@@ -144,6 +183,8 @@ function Calender() {
     console.log("This Month:",{dateArray})
     console.log(beforeDateArray)
     console.log(afterDateArray)
+    console.log(dayOfWeekOfNewFirstDate)
+    
 
     return (
         <>
