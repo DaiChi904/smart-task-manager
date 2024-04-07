@@ -48,7 +48,7 @@ const leapYearLastDayArray: {[key: number]: number} = {
     12: 31,
 }
 
-let dateOfToday = new Date( 2024, 7, 4);
+let dateOfToday = new Date( 2024, 0, 4);
 
 function firstDateInfoGeter(yearOfToday:number, monthOfToday:number) {
     const firstDate = new Date(yearOfToday, monthOfToday, 1);
@@ -58,10 +58,6 @@ function firstDateInfoGeter(yearOfToday:number, monthOfToday:number) {
 function lastDateInfoGeter(yearOfToday:number, monthOfToday:number) {
     const lastDate = new Date(yearOfToday, monthOfToday, commonYearLastDayArray[monthOfToday + 1]);
     return lastDate;
-}
-
-function calendarAdjuster() {
-
 }
 
 function dateBacker(yearOfToday:number, monthOfToday:number) {
@@ -168,7 +164,7 @@ function Calender() {
             beforeDateArray.unshift(newDate);
         }
         setBeforeDateArray([...beforeDateArray])
-        for (let ai:number = 1; ai <= 6 - dayOfWeekOfNewLastDate; ai++) {
+        for (let ai:number = 1; ai <= 42 - newDateArray.length - beforeDateArray.length; ai++) {
             const newDate: dateArrayType = {
                 year: yearOfToday,
                 month: monthOfToday,
