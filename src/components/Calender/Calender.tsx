@@ -207,7 +207,6 @@ function Calender() {
     
     console.log("This Month:",{dateArray})
     console.log("Todos:",{todos})
-    
 
     return (
         <>
@@ -233,7 +232,9 @@ function Calender() {
                                 <div>
                                     <b>{dateArray.day}</b>
                                 </div>
-                                <b>{dateArray.info}</b>
+                                <div>
+                                    <b>{dateArray.info}</b>
+                                </div>
                             </div>
                         ))}
                         {afterDateArray.map((afterDateArray) => (
