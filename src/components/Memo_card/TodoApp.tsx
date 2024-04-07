@@ -17,7 +17,8 @@ export type CardValue = {
   cardTitle: string;
   cardContent: string;
   checked: boolean;
-  dueDate: null | string | string[] | undefined;
+  startDate?: null | string | string[] | undefined;
+  dueDate?: null | string | string[] | undefined;
 }
 export const todosAtom = atom<CardValue[]>([])
 

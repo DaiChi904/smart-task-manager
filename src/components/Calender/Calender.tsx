@@ -87,25 +87,25 @@ function dateAdvancer(yearOfToday:number, monthOfToday:number) {
 }
 
 function Calender() {
+    const [todos, setTodos] = useAtom(todosAtom);
 
     type dateArrayType = {
         year: number,
         month: number,
         day: number,
         dayOfWeek: number,
-        info?: string,
+        info?: string | null,
+        isIndicatied?: boolean,
     }
 
-    const [todos, setTodos] = useAtom(todosAtom);
-
-    const [beforeDateArray, setBeforeDateArray] = useState<dateArrayType[]>([])
-    const [dateArray, setDateArray] = useState<dateArrayType[]>([])
-    const [afterDateArray, setAfterDateArray] = useState<dateArrayType[]>([])
+    const [beforeDateArray, setBeforeDateArray] = useState<dateArrayType[]>([]);
+    const [dateArray, setDateArray] = useState<dateArrayType[]>([]);
+    const [afterDateArray, setAfterDateArray] = useState<dateArrayType[]>([]);
     
     
 
     // Info about date at this time.
-    //const dateOfToday = new Date();
+    const dateOfToday = new Date();
     const yearOfToday: number = dateOfToday.getFullYear();
     const monthOfToday: number = dateOfToday.getMonth();
     const dayOfToday: number = dateOfToday.getDate();
@@ -133,26 +133,55 @@ function Calender() {
 
         for (let i:number = 1; i <= commonYearLastDayArray[monthOfToday + 1]; i++) {
             const dateOfNewDate = new Date(yearOfToday, monthOfToday, i);
-            const testInfo: string = "ここが今日";
-            if (i === dayOfToday) {
-                const newDate: dateArrayType = {
-                    year: dateOfNewDate.getFullYear(),
-                    month: dateOfNewDate.getMonth() + 1,
-                    day: dateOfNewDate.getDate(),
-                    dayOfWeek: dateOfNewDate.getDay(),
-                    info: testInfo,
+                if (todos.length > 0) {
+                    todos.map((todos) => {
+                        if (i === dayOfToday) {
+                            const newDate: dateArrayType = {
+                                year: dateOfNewDate.getFullYear(),
+                                month: dateOfNewDate.getMonth() + 1,
+                                day: dateOfNewDate.getDate(),
+                                dayOfWeek: dateOfNewDate.getDay(),
+                                info: todos.cardTitle,
+                                isIndicatied: true,
+                            }
+                            newDateArray.push(newDate);
+                        } else {
+                            const newDate: dateArrayType = {
+                                year: dateOfNewDate.getFullYear(),
+                                month: dateOfNewDate.getMonth() + 1,
+                                day: dateOfNewDate.getDate(),
+                                dayOfWeek: dateOfNewDate.getDay(),
+                                info: todos.cardTitle,
+                                isIndicatied: false,
+                            }
+                            newDateArray.push(newDate);
+                        }
+                    })
+                } else {
+                    if (i === dayOfToday) {
+                        const newDate: dateArrayType = {
+                            year: dateOfNewDate.getFullYear(),
+                            month: dateOfNewDate.getMonth() + 1,
+                            day: dateOfNewDate.getDate(),
+                            dayOfWeek: dateOfNewDate.getDay(),
+                            info: null,
+                            isIndicatied: true,
+                        }
+                        newDateArray.push(newDate);
+                    } else {
+                        const newDate: dateArrayType = {
+                            year: dateOfNewDate.getFullYear(),
+                            month: dateOfNewDate.getMonth() + 1,
+                            day: dateOfNewDate.getDate(),
+                            dayOfWeek: dateOfNewDate.getDay(),
+                            info: null,
+                            isIndicatied: false,
+                        }
+                        newDateArray.push(newDate);
+                    }
                 }
-                newDateArray.push(newDate);
-            } else {
-                const newDate: dateArrayType = {
-                    year: dateOfNewDate.getFullYear(),
-                    month: dateOfNewDate.getMonth() + 1,
-                    day: i,
-                    dayOfWeek: dateOfNewDate.getDay(),
-                }
-                newDateArray.push(newDate);
-            }
         }
+        
         setDateArray([...newDateArray])
         for (let bi:number = commonYearLastDayArray[beforeMonth + 1]; bi > commonYearLastDayArray[beforeMonth + 1] - dayOfWeekOfNewFirstDate; bi--) {
             const newDate: dateArrayType = {
@@ -174,12 +203,10 @@ function Calender() {
             afterDateArray.push(newDate);
         }
         setAfterDateArray([...afterDateArray])
-    },[])
+    },[todos])
     
     console.log("This Month:",{dateArray})
-    console.log(beforeDateArray)
-    console.log(afterDateArray)
-    console.log(dayOfWeekOfNewFirstDate)
+    console.log("Todos:",{todos})
     
 
     return (
@@ -187,7 +214,7 @@ function Calender() {
             <div id='TodosDisplayerContainer'>
                 <div id='TodosLeftDisplayer'>
                     <p>左側のフレックス</p>
-                    <h1>{yearOfToday}年{monthOfToday + 1}月</h1>
+                    <h1>{dayOfToday}. {monthOfToday + 1}. {yearOfToday}</h1>
                     <div id='Calendar-Container'>
                         <div className='Calendar-DateBox'>Sun</div>
                         <div className='Calendar-DateBox'>Mon</div>
@@ -197,10 +224,17 @@ function Calender() {
                         <div className='Calendar-DateBox'>Fri</div>
                         <div className='Calendar-DateBox'>Sat</div>
                         {beforeDateArray.map((beforeDateArray) => (
-                            <div className='Calendar-Children-before'>{beforeDateArray.day}</div>
+                            <div className='Calendar-Children-before'>
+                                {beforeDateArray.day}
+                            </div>
                         ))}
                         {dateArray.map((dateArray) => (
-                            <div className='Calendar-Children'>{dateArray.day}{dateArray.info}</div>
+                            <div className={dateArray.isIndicatied ? "Calendar-Children-indicatied" : "Calendar-Children"}>
+                                <div>
+                                    <b>{dateArray.day}</b>
+                                </div>
+                                <b>{dateArray.info}</b>
+                            </div>
                         ))}
                         {afterDateArray.map((afterDateArray) => (
                             <div className='Calendar-Children-after'>{afterDateArray.day}</div>
