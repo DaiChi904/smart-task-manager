@@ -83,7 +83,6 @@ function CardList() {
   }
 
   const handleConfirmEdit = () => {
-    setShowStatus(false);
     // Create new edited card
     const newTodo: CardValue = {
       id: todos.length,
@@ -102,10 +101,21 @@ function CardList() {
     });
     // Create editied todos array
     setTodos([newTodo, ...pendingTodos]);
+
+    // 関数化してきれいにできそう
+    setShowStatus(false);
+    setEditTitleValue("");
+    setEditContentValue("");
+    setEditTodoDueDate(null);
+    setEditingCardID(NaN);
   }
 
   const handleCancelEdit = () => {
     setShowStatus(false);
+    setEditTitleValue("");
+    setEditContentValue("");
+    setEditTodoDueDate(null);
+    setEditingCardID(NaN);
   }
 
   const handleDelete = () => {
@@ -118,7 +128,12 @@ function CardList() {
     });
     // Significant bug exist. It is needed to investigate. Maybe it is because of id is set by todos(array) length. It needs completely unique id.
     setTodos([...pendingTodos]);
+    
     setShowStatus(false);
+    setEditTitleValue("");
+    setEditContentValue("");
+    setEditTodoDueDate(null);
+    setEditingCardID(NaN);
   }
   
   return(
