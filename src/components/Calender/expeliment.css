@@ -1,0 +1,14 @@
+.test {
+    display: flex;
+    flex-direction: column;
+}
+
+.Calendar-Children {
+    display: flex;
+    flex-direction: column;
+    width: calc(99%/7);
+    height: 100px;
+    border: solid 1px black;
+    margin: 0.5px;
+    background-color: rgb(184, 191, 255);
+}

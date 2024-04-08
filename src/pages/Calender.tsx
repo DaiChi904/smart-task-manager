@@ -1,5 +1,6 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import Calender from '../components/Calender/Calender';
+import Expelimentalcalender from '../components/Calender/expeliment';
 
 const Tab2: React.FC = () => {
   return (
@@ -15,7 +16,7 @@ const Tab2: React.FC = () => {
             <IonTitle size="large">Tab 2</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <Calender />
+        <Expelimentalcalender />
       </IonContent>
     </IonPage>
   );
