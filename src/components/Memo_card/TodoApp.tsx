@@ -1,6 +1,6 @@
 // Core part of this App. Create new todos and displying Todo List is main role of this Compornent. Additionaly, the core content of Todos and setTodos, which is this App, is difined in this compornent as a TodosContext.
 
-import { useState, createContext, useRef, FormEvent } from "react";
+import { useState, createContext, useRef, FormEvent, useEffect } from "react";
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon } from '@ionic/react';
 import { IonDatetime } from "@ionic/react";
 import { IonButtons, IonButton } from "@ionic/react";
@@ -24,6 +24,18 @@ export const todosAtom = atom<CardValue[]>([])
 
 
 function TodoApp() {
+  function dateFormatter(dateString: string): { year: number, month: number, day: number, hour: number, minute: number } {
+    const date = new Date(dateString);
+    return {
+        year: date.getFullYear(),
+        month: date.getMonth(),
+        day: date.getDate(),
+        hour: date.getHours(),
+        minute: date.getMinutes()
+    };
+}
+
+
   // States which are related to show or hide input field by pressing paticular elements.
   const [todoInputFieldShowStatus, setTodoInputFieldShowStatus] = useState(false);
   const [todoDateSetFieldShowStatus, setTodoDateSetFieldShowStatus] = useState(false);
@@ -54,8 +66,9 @@ function TodoApp() {
   // Set due-date from calender.
   const DateConfirm = () => {
     dueDate.current?.confirm();
-    const Date = dueDate.current?.value;
-    setTodoDueDate(Date);
+    const Date_Default = dueDate.current?.value;
+    const Date_Formatted = dateFormatter(Date_Default);
+    setTodoDueDate(Date_Default);
     setTodoDateSetFieldShowStatus(false);
   };
   const DateClear = () => {
@@ -111,6 +124,11 @@ function TodoApp() {
   const [inputContentValue, setInputContentValue] = useState("");
   const [todoDueDate, setTodoDueDate] = useState<null | string | string[] | undefined>(null);
   const [todos, setTodos] = useAtom(todosAtom);
+
+  // Debug
+  useEffect(() => {
+    console.log(todos);
+  }, [todos])
 
   return(
     <div className="Container">

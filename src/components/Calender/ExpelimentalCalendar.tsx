@@ -93,9 +93,6 @@ function ExpCalendar() {
     // Date which is selected
     const [currentDate, setCurrentDate] = useState<dateType>({year: yearOfToday, month: monthOfToday, day: dayOfToday, dayOfWeek: dayOfWeekOfToday,});
 
-    
-
-
     useEffect(() => {
         const newBeforeRenderArray: renderArrayType[] = [];
         const newCurrentRenderArray: renderArrayType[] = [];
@@ -137,6 +134,11 @@ function ExpCalendar() {
                 day: i,
                 dayOfWeek: DayOfWeek,
             }
+            todos.map((todos) => {
+                const todosDate = todos.dueDate;
+                const todosDate_aligned = todosDate;
+                console.log(todosDate_aligned)
+            })
             // append from head
             newCurrentRenderArray.push({day: newDate.day, todos: null, isToday: false});
         }
@@ -161,6 +163,9 @@ function ExpCalendar() {
 
     return (
         <>  
+        <div>
+            {currentDate.year}. {currentDate.month + 1}. {currentDate.day}
+        </div>
         <div className='container'>
             <div className='Calendar-DateBox'>Sun</div>
             <div className='Calendar-DateBox'>Mon</div>
