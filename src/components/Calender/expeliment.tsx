@@ -17,7 +17,7 @@ function Expelimentalcalender() {
         },
         {
             day: 4,
-            info: [{todo: "test3"}, {todo: "test3"}]
+            info: [{todo: "test3"}, {todo: "test4"}, {todo: "test5"}]
         },
     ]
     
