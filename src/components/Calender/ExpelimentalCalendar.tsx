@@ -3,6 +3,7 @@ import { IonDatetime } from '@ionic/react';
 import { todosAtom } from '../Memo_card/TodoApp';
 import { useAtom } from 'jotai';
 import { render } from '@testing-library/react';
+import "./expeliment.css";
 
 // !Important It should add leapYear Array
 const commonYearLastDayArray: {[key: number]: number} = {
@@ -68,12 +69,10 @@ function ExpCalendar() {
 
     type renderArrayType = {
         day: number,
-        todos: null | string[],
+        todos: null | [
+            todo: null | string[],
+        ],
         isToday: boolean,
-    }
-
-    type todosChildren = {
-
     }
 
     // !Important Month: 0 ~ 11, dayOfWeek: Sun = 0 ~ Sat = 6; Month needs to be plased one when it is rendered.
@@ -88,21 +87,20 @@ function ExpCalendar() {
     // Get Atom
     const [todos, setTodos] = useAtom(todosAtom);
 
-    const [renderArray, setRenderArray] = useState<renderArrayType[]>();
+    const [renderArray_CurrentDate, setRenderArray_CurrentDate] = useState<renderArrayType[]>([]);
+    const [renderArray_BeforeDate, setRenderArray_BeforeDate] = useState<renderArrayType[]>([]);
+    const [renderArray_AfterDate, setRenderArray_AfterDate] = useState<renderArrayType[]>([]);
     // Date which is selected
     const [currentDate, setCurrentDate] = useState<dateType>({year: yearOfToday, month: monthOfToday, day: dayOfToday, dayOfWeek: dayOfWeekOfToday,});
-    // Values are Defined in the useEffect below
-    const [beforeDateArray, setBeforeDateArray] = useState<dateType[]>();
-    const [afterDateArray, setAfterDateArray] = useState<dateType[]>();
 
     
 
 
     useEffect(() => {
-        const beforeDateArray: dateType[] = [];
-        const currentDateArray: dateType[] = [];
-        const afterDateArray: dateType[] = [];
-        // useEffect内で色々定義する
+        const newBeforeRenderArray: renderArrayType[] = [];
+        const newCurrentRenderArray: renderArrayType[] = [];
+        const newAfterRenderArray: renderArrayType[] = [];
+
         // Get first date infomation of currrentDate
         const firstDate = firstDateInfoGeter(currentDate.year, currentDate.month);
         // Get day of week of first day
@@ -111,14 +109,13 @@ function ExpCalendar() {
         const beforeDate = dateBacker(currentDate.year, currentDate.month);
         const beforeYear = beforeDate.getFullYear();
         const beforeMonth = beforeDate.getMonth();
-        console.log(beforeDate);
+
         const afterDate = dateAdvancer(currentDate.year, currentDate.month);
         const afterYear = afterDate.getFullYear();
         const afterMonth = afterDate.getMonth();
-        console.log(beforeDate);
 
         // Array of day of manth before currentMonth
-        for (let bi:number = commonYearLastDayArray[beforeMonth + 1]; bi > commonYearLastDayArray[beforeMonth + 1] - dayOdWeekOfFirstDate; bi--) {
+        for (let bi:number = commonYearLastDayArray[beforeMonth]; bi > commonYearLastDayArray[beforeMonth] - dayOdWeekOfFirstDate; bi--) {
             const DayOfWeek = dayOfWeekGeter(beforeYear, beforeMonth, bi)
             const newDate: dateType = {
                 year: beforeYear,
@@ -127,12 +124,26 @@ function ExpCalendar() {
                 dayOfWeek: DayOfWeek,
             }
             // append from tail
-            beforeDateArray.unshift(newDate);
-            //setRenderArray([...renderArray, {day: beforeDateArray, }])
+            newBeforeRenderArray.unshift({day: newDate.day, todos: null, isToday: false});
         }
-        setBeforeDateArray([...beforeDateArray]);
+        setRenderArray_BeforeDate([...newBeforeRenderArray]);
+        
+        // Array of day of current Month
+        for (let i :number = 1; i <= commonYearLastDayArray[currentDate.month]; i++) {
+            const DayOfWeek = dayOfWeekGeter(currentDate.year, currentDate.month, i)
+            const newDate: dateType = {
+                year: currentDate.year,
+                month: currentDate.month,
+                day: i,
+                dayOfWeek: DayOfWeek,
+            }
+            // append from head
+            newCurrentRenderArray.push({day: newDate.day, todos: null, isToday: false});
+        }
+        setRenderArray_CurrentDate([...newCurrentRenderArray]);
+
         // Array of day of manth after currentMonth
-        for (let ai:number = 1; ai <= 42 - currentDateArray.length - beforeDateArray.length; ai++) {
+        for (let ai:number = 1; ai <= 42 - newCurrentRenderArray.length - newBeforeRenderArray.length; ai++) {
             const DayOfWeek = dayOfWeekGeter(afterYear, afterMonth, ai)
             const newDate: dateType = {
                 year: afterYear,
@@ -141,33 +152,56 @@ function ExpCalendar() {
                 dayOfWeek: DayOfWeek,
             }
             // append from head
-            afterDateArray.push(newDate);
-            setRenderArray("");
+            newAfterRenderArray.push({day: newDate.day, todos: null, isToday: false});
         }
-        setAfterDateArray([...afterDateArray]);
-
-        // Set renderArray
-        
-
+        setRenderArray_AfterDate([...newAfterRenderArray]);
     }, [todos])
     
-
-
-
-
+    console.log(renderArray_BeforeDate, renderArray_CurrentDate, renderArray_AfterDate)
 
     return (
-        <>
-            {renderArray.map((renderArray) => (
-                <div className={renderArray.isToday ? "testTrue" : "testFalse"}>
-                    {renderArray.day}
-                    {renderArray.todos && renderArray.todos.map((info) => (
-                        <div className="test">
-                            {info.todos}
-                        </div>
-                    ))}
-                </div>
-            ))}
+        <>  
+        <div className='container'>
+            <div className='Calendar-DateBox'>Sun</div>
+            <div className='Calendar-DateBox'>Mon</div>
+            <div className='Calendar-DateBox'>Tue</div>
+            <div className='Calendar-DateBox'>Wed</div>
+            <div className='Calendar-DateBox'>Thu</div>
+            <div className='Calendar-DateBox'>Fri</div>
+            <div className='Calendar-DateBox'>Sat</div>
+            {renderArray_BeforeDate.map((renderArray) => (
+                    <div className={renderArray.isToday ? "testTrue" : "testFalse"}>
+                        {renderArray.day}
+                        {renderArray.todos && renderArray.todos.map((todos) => (
+                            <div className="test">
+                                {todos}
+                            </div>
+                        ))}
+                    </div>
+                ))}
+
+            {renderArray_CurrentDate.map((renderArray) => (
+                    <div className={renderArray.isToday ? "testTrue" : "testFalse"}>
+                        {renderArray.day}
+                        {renderArray.todos && renderArray.todos.map((todos) => (
+                            <div className="test">
+                                {todos}
+                            </div>
+                        ))}
+                    </div>
+                ))}
+
+            {renderArray_AfterDate.map((renderArray) => (
+                    <div className={renderArray.isToday ? "testTrue" : "testFalse"}>
+                        {renderArray.day}
+                        {renderArray.todos && renderArray.todos.map((todos) => (
+                            <div className="test">
+                                {todos}
+                            </div>
+                        ))}
+                    </div>
+                ))}
+        </div>
         </>
     )
 }
