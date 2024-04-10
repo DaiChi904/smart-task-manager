@@ -9,16 +9,25 @@
 .testFalse {
     display: flex;
     width: calc(95%/7);
-    height: 100px;
+    height: 85px;
     border: solid 1px black;
     margin: 0.5px;
+}
+
+.leftFlex {
+    display: flex;
+    flex-direction: column;
+}
+
+.dateHolder {
+    display: flex;
 }
 
 .Calendar-DateBox {
     display: flex;
     flex-direction: column;
     width: calc(95%/7);
-    height: 50px;
+    height: 40px;
     border: solid 1px;
     font-size: 25px;
     justify-content: center;

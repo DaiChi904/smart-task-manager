@@ -1,6 +1,5 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import Calender from '../components/Calender/Calender';
-import Expelimentalcalender from '../components/Calender/expeliment';
 import ExpCalendar from '../components/Calender/ExpelimentalCalendar';
 
 const Tab2: React.FC = () => {
