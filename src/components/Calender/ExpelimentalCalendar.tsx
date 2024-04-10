@@ -42,6 +42,7 @@ function ExpCalendar() {
         const DayOfWeek = new Date(year, month, day).getDay();
         return DayOfWeek;
     }
+    // Get year and manth of before month from current month
     function dateBacker(currentYear:number, currentMonth:number) {
         if (currentMonth === 0) {
             const changedYearNum: number = currentYear -1;
@@ -54,6 +55,7 @@ function ExpCalendar() {
             return backedDate;
         }
     }
+    // Get year and manth of next month from current month
     function dateAdvancer(currentYear:number, currentMonth:number) {
         if (currentMonth === 11) {
             const changedYearNum: number = currentYear + 1;
