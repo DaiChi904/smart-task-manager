@@ -30,15 +30,15 @@ const dayOfWeekOfToday = dateOfToday.getDay();
 
 function ExpCalendar() {
     // functions
-    function firstDateInfoGeter(currentYear:number, currentMonth:number) {
+    function firstDateInfoGetter(currentYear:number, currentMonth:number) {
         const firstDate = new Date(currentYear, currentMonth, 1);
         return firstDate;
     }
-    function lastDateInfoGeter(currentYear:number, currentMonth:number) {
+    function lastDateInfoGetter(currentYear:number, currentMonth:number) {
         const lastDate = new Date(currentYear, currentMonth, commonYearLastDayArray[currentMonth]);
         return lastDate;
     }
-    function dayOfWeekGeter(year: number, month: number, day:number) {
+    function dayOfWeekGetter(year: number, month: number, day:number) {
         const DayOfWeek = new Date(year, month, day).getDay();
         return DayOfWeek;
     }
@@ -97,7 +97,7 @@ function ExpCalendar() {
         const newAfterRenderArray: renderArrayType[] = [];
 
         // Get first date infomation of currrentDate
-        const firstDate = firstDateInfoGeter(currentDate.year, currentDate.month);
+        const firstDate = firstDateInfoGetter(currentDate.year, currentDate.month);
         // Get day of week of first day
         const dayOdWeekOfFirstDate = firstDate.getDay();
         
@@ -111,7 +111,7 @@ function ExpCalendar() {
 
         // Array of day of manth before currentMonth
         for (let bi:number = commonYearLastDayArray[beforeMonth]; bi > commonYearLastDayArray[beforeMonth] - dayOdWeekOfFirstDate; bi--) {
-            const DayOfWeek = dayOfWeekGeter(beforeYear, beforeMonth, bi)
+            const DayOfWeek = dayOfWeekGetter(beforeYear, beforeMonth, bi)
             const newDate: dateType = {
                 year: beforeYear,
                 month: monthOfToday,
@@ -125,7 +125,7 @@ function ExpCalendar() {
         
         // Array of day of current Month
         for (let i :number = 1; i <= commonYearLastDayArray[currentDate.month]; i++) {
-            const DayOfWeek = dayOfWeekGeter(currentDate.year, currentDate.month, i)
+            const DayOfWeek = dayOfWeekGetter(currentDate.year, currentDate.month, i)
             const newDate: dateType = {
                 year: currentDate.year,
                 month: currentDate.month,
@@ -171,7 +171,7 @@ function ExpCalendar() {
 
         // Array of day of manth after currentMonth
         for (let ai:number = 1; ai <= 42 - newCurrentRenderArray.length - newBeforeRenderArray.length; ai++) {
-            const DayOfWeek = dayOfWeekGeter(afterYear, afterMonth, ai)
+            const DayOfWeek = dayOfWeekGetter(afterYear, afterMonth, ai)
             const newDate: dateType = {
                 year: afterYear,
                 month: afterMonth,
