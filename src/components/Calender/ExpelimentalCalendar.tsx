@@ -133,6 +133,7 @@ function ExpCalendar() {
                 dayOfWeek: DayOfWeek,
             }
             const todosArray: string[] = [];
+            // Search todos.dueDate match to Day or not one by one.
             todos.map((todos) => {
                 const todosDate = todos.dueDate;
                 const Year = todosDate?.slice(0, 4);
@@ -144,6 +145,7 @@ function ExpCalendar() {
 
                 const title = todos.cardTitle;
                 
+                // Push title to todosArray if todosDate and I, which is the day, is match.
                 if (i < 10) {
                     const I = `0${i}`;
                     if (I === Day) {
