@@ -4,6 +4,7 @@
     height: 100px;
     border: solid 1px black;
     margin: 0.5px;
+    flex-direction: column;
 }
 
 .testFalse {
@@ -12,6 +13,7 @@
     height: 85px;
     border: solid 1px black;
     margin: 0.5px;
+    flex-direction: column;
 }
 
 .leftFlex {

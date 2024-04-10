@@ -69,9 +69,7 @@ function ExpCalendar() {
 
     type renderArrayType = {
         day: number,
-        todos: null | [
-            todo: null | string[],
-        ],
+        todos: null | string[],
         isToday: boolean,
     }
 
@@ -134,13 +132,38 @@ function ExpCalendar() {
                 day: i,
                 dayOfWeek: DayOfWeek,
             }
+            const todosArray: string[] = [];
             todos.map((todos) => {
                 const todosDate = todos.dueDate;
-                const todosDate_aligned = todosDate;
-                console.log(todosDate_aligned)
+                const Year = todosDate?.slice(0, 4);
+                const Month = todosDate?.slice(5, 7);
+                const Day = todosDate?.slice(8, 10);
+                const Hour = todosDate?.slice(11, 13);
+                const Minute = todosDate?.slice(14, 16);
+                console.log(Year, Month, Day, Hour, Minute);
+
+                const title = todos.cardTitle;
+                
+                if (i < 10) {
+                    const I = `0${i}`;
+                    if (I === Day) {
+                        todosArray.push(title);
+                        return;
+                    } else {
+                        return;
+                    }
+                } else {
+                    const I = `${i}`;
+                    if (I === Day) {
+                        todosArray.push(title);
+                        return;
+                    } else {
+                        return;
+                    }
+                }
             })
             // append from head
-            newCurrentRenderArray.push({day: newDate.day, todos: null, isToday: false});
+            newCurrentRenderArray.push({day: newDate.day, todos: todosArray, isToday: false});
         }
         setRenderArray_CurrentDate([...newCurrentRenderArray]);
 
