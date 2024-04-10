@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { todosAtom } from "../Memo_card/TodoApp";
 import { useAtom } from "jotai";
 import "./expeliment.css";
@@ -42,7 +42,7 @@ export default function ExpCalendar() {
     setBeforeMonth(newBeforeMonth);
 
     // Array of day of current Month
-    const newCurrentRenderArray: Day[] = [
+    const newCurrentMonth: Day[] = [
       ...Array(getLastDay(currentDate.getMonth())),
     ].map((_, i) => {
       const filteredTodos = todos.filter((todo) => {
@@ -58,12 +58,11 @@ export default function ExpCalendar() {
         isToday: false,
       };
     });
-    setCurrentMonth(newCurrentRenderArray);
+    setCurrentMonth(newCurrentMonth);
 
     // Array of day of manth after currentMonth
-    const nextWeekCount = 2;
     const newAfterMonth = [
-      ...Array(7 * nextWeekCount + 1 - currentDate.getDay()),
+      ...Array(42 - [...newBeforeMonth, ...newCurrentMonth].length),
     ].map((_, i) => {
       return {
         day: i + 1,
@@ -72,7 +71,7 @@ export default function ExpCalendar() {
       };
     });
     setAfterMonth(newAfterMonth);
-  }, [todos]);
+  }, [todos, currentDate]);
 
   return (
     <>
@@ -90,6 +89,15 @@ export default function ExpCalendar() {
           </div>
         ))}
       </div>
+      <div style={{ display: "flex" }}>
+        <span onClick={() => setCurrentDate(getBeforeMonth(currentDate))}>
+          ←
+        </span>
+        <span onClick={() => setCurrentDate(new Date())}>Today</span>
+        <span onClick={() => setCurrentDate(getBeforeMonth(currentDate))}>
+          →
+        </span>
+      </div>
     </>
   );
 }
@@ -103,4 +111,4 @@ const CalendarHeader = () => (
 );
 
 const formatDate = (date: Date) =>
-  `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDay()}`;
+  `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDate()}`;
