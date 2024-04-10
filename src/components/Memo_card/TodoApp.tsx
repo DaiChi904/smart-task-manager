@@ -24,18 +24,6 @@ export const todosAtom = atom<CardValue[]>([])
 
 
 function TodoApp() {
-  function dateFormatter(dateString: string): { year: number, month: number, day: number, hour: number, minute: number } {
-    const date = new Date(dateString);
-    return {
-        year: date.getFullYear(),
-        month: date.getMonth(),
-        day: date.getDate(),
-        hour: date.getHours(),
-        minute: date.getMinutes()
-    };
-}
-
-
   // States which are related to show or hide input field by pressing paticular elements.
   const [todoInputFieldShowStatus, setTodoInputFieldShowStatus] = useState(false);
   const [todoDateSetFieldShowStatus, setTodoDateSetFieldShowStatus] = useState(false);
@@ -67,8 +55,20 @@ function TodoApp() {
   const DateConfirm = () => {
     dueDate.current?.confirm();
     const Date_Default = dueDate.current?.value;
-    const Date_Formatted = dateFormatter(Date_Default);
-    setTodoDueDate(Date_Default);
+    // Set formated string: YYYY-MM-DD-HH-MM-SS
+    if (typeof Date_Default === null) {
+      console.log("An error has occuered")
+      return;
+    } else if (typeof Date_Default === "string") {
+      const Date_Formated = Date_Default.replace(/T|:/g, "-");
+      setTodoDueDate(Date_Formated);
+    } else if (typeof Date_Default === "object") {
+      console.log("An error has occuered")
+      return;
+    } else if (typeof Date_Default === "undefined") {
+      console.log("An error has occuered")
+      return;
+    }
     setTodoDateSetFieldShowStatus(false);
   };
   const DateClear = () => {
