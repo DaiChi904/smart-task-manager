@@ -1,10 +1,11 @@
 .testTrue {
     display: flex;
     width: calc(95%/7);
-    height: 100px;
+    height: 85px;
     border: solid 1px black;
     margin: 0.5px;
     flex-direction: column;
+    background-color: rgb(172, 165, 236);
 }
 
 .testFalse {
