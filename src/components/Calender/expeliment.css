@@ -1,3 +1,35 @@
+#entireContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+#calendarContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+#calendarMenu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#date {
+    font-size: 25px;
+}
+
+.calendarMenuChild {
+    display: flex;
+    flex-direction: row;
+}
+
+.calendarMenuButton {
+    display: block;
+    height: 30px;
+    width: 50px;
+    margin-bottom: 5px;
+}
+
 .testTrue {
     display: flex;
     width: calc(95%/7);
@@ -39,6 +71,11 @@
 }
 
 .container {
+    display: flex;
+    flex-direction: column;
+}
+
+#calendarContainer {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
