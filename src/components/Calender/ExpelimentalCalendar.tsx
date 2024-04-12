@@ -103,7 +103,7 @@ function ExpCalendar() {
                     return;
                 }
             })
-            // append from head
+            // Check isToday, then append from head.
             if (dateOfToday.getDate() == i && (currentDate.year === dateOfToday.getFullYear()) && (currentDate.month === dateOfToday.getMonth())) {
                 newCurrentMonth.push({ day: newDate.day, todos: todosArray, isToday: true });
             } else {
