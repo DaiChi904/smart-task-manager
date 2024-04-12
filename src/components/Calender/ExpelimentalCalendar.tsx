@@ -89,13 +89,13 @@ function ExpCalendar() {
                 const title = todos.cardTitle;
 
                 // Push title to todosArray if todosDate and I, which is the day, is match.
-                if (i < 10) {
+                if (i < 10 && (`${currentDate.year}` == splitedTodosDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDate[1])) {
                     const I = `0${i}`;
                     if (I === splitedTodosDate[2]) {
                         todosArray.push(title);
                     }
                     return;
-                } else {
+                } else if ((`${currentDate.year}` == splitedTodosDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDate[1])){
                     const I = `${i}`;
                     if (I === splitedTodosDate[2]) {
                         todosArray.push(title);
@@ -133,7 +133,9 @@ function ExpCalendar() {
         <>
             <div id="entireContainer">
 
-                
+                <div className="container">
+                    
+                </div>
 
                 <div className="container">
                     
