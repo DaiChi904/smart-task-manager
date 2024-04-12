@@ -82,7 +82,7 @@ function ExpCalendar() {
             // Search todos.dueDate match to Day or not, one by one.
             todos.forEach((todos) => {
                 const todosDate = todos.dueDate;
-                if (typeof todosDate !== "string") return alert("Unexpected error has ocuured.")
+                if (typeof todosDate !== "string") return alert("Unexpected error has ocuured.");
                 // Splited Order is year[0], month[1], day[2], hour[3], minute[4].
                 const splitedTodosDate = todosDate.split("-");
 
@@ -116,7 +116,7 @@ function ExpCalendar() {
         // Array of day of manth after currentMonth
         const afterDate = getNextMonth(new Date(currentDate.year, currentDate.month));
         for (let ai: number = 1; ai <= 42 - newCurrentMonth.length - newBeforeMonth.length; ai++) {
-            const dayOfWeek = getDayOfWeek(new Date(afterDate.getFullYear(), afterDate.getMonth(), ai))
+            const dayOfWeek = getDayOfWeek(new Date(afterDate.getFullYear(), afterDate.getMonth(), ai));
             const newDate: DateType = {
                 year: afterDate.getFullYear(),
                 month: afterDate.getMonth(),
@@ -127,7 +127,7 @@ function ExpCalendar() {
             newAfterMonth.push({ day: newDate.day, todos: null, isToday: false });
         }
         setAfterMonth([...newAfterMonth]);
-    }, [todos, currentDate])
+    }, [todos, currentDate]);
 
     return (
         <>
