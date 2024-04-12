@@ -57,12 +57,12 @@ function ExpCalendar() {
         // Array of day of manth before currentMonth
         const beforeDate = getBeforeMonth(new Date(currentDate.year, currentDate.month));
         for (let bi: number = getLastDay(beforeDate.getMonth()); bi > getLastDay(beforeDate.getMonth()) - getDayOfWeek(new Date(currentDate.year, currentDate.month, 1)); bi--) {
-            const DayOfWeek = getDayOfWeek(new Date());
+            const dayOfWeek = getDayOfWeek(new Date());
             const newDate: DateType = {
                 year: beforeDate.getFullYear(),
                 month: beforeDate.getMonth(),
                 day: bi,
-                dayOfWeek: DayOfWeek,
+                dayOfWeek: dayOfWeek,
             }
             // append from tail
             newBeforeMonth.unshift({ day: newDate.day, todos: null, isToday: false });
@@ -71,16 +71,16 @@ function ExpCalendar() {
 
         // Array of day of current Month
         for (let i: number = 1; i <= getLastDay(currentDate.month); i++) {
-            const DayOfWeek = getDayOfWeek(new Date(currentDate.year, currentDate.month, i));
+            const dayOfWeek = getDayOfWeek(new Date(currentDate.year, currentDate.month, i));
             const newDate: DateType = {
                 year: currentDate.year,
                 month: currentDate.month,
                 day: i,
-                dayOfWeek: DayOfWeek,
+                dayOfWeek: dayOfWeek,
             }
             const todosArray: string[] = [];
             // Search todos.dueDate match to Day or not, one by one.
-            todos.map((todos) => {
+            todos.forEach((todos) => {
                 const todosDate = todos.dueDate;
                 if (typeof todosDate !== "string") return alert("Unexpected error has ocuured.")
                 // Splited Order is year[0], month[1], day[2], hour[3], minute[4].
@@ -93,18 +93,14 @@ function ExpCalendar() {
                     const I = `0${i}`;
                     if (I === splitedTodosDate[2]) {
                         todosArray.push(title);
-                        return;
-                    } else {
-                        return;
                     }
+                    return;
                 } else {
                     const I = `${i}`;
                     if (I === splitedTodosDate[2]) {
                         todosArray.push(title);
-                        return;
-                    } else {
-                        return;
                     }
+                    return;
                 }
             })
             // append from head
@@ -120,12 +116,12 @@ function ExpCalendar() {
         // Array of day of manth after currentMonth
         const afterDate = getNextMonth(new Date(currentDate.year, currentDate.month));
         for (let ai: number = 1; ai <= 42 - newCurrentMonth.length - newBeforeMonth.length; ai++) {
-            const DayOfWeek = getDayOfWeek(new Date(afterDate.getFullYear(), afterDate.getMonth(), ai))
+            const dayOfWeek = getDayOfWeek(new Date(afterDate.getFullYear(), afterDate.getMonth(), ai))
             const newDate: DateType = {
                 year: afterDate.getFullYear(),
                 month: afterDate.getMonth(),
                 day: ai,
-                dayOfWeek: DayOfWeek,
+                dayOfWeek: dayOfWeek,
             }
             // append from head
             newAfterMonth.push({ day: newDate.day, todos: null, isToday: false });
@@ -149,6 +145,7 @@ function ExpCalendar() {
                         </div>
                         <div className="calendarMenuChild">
                             <button className="calendarMenuButton" onClick={handleSetBeforeMonth}><span><b>&lt;</b></span></button>
+                            <b>|</b>
                             <button className="calendarMenuButton" onClick={handleSetNextMonth}><span><b>&gt;</b></span></button>
                         </div>
                     </div>
