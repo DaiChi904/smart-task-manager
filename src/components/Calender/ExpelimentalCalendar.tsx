@@ -10,13 +10,20 @@ import "./expeliment.css";
 
 type CalendarType = {
     day: number,
-    todos: null | string[],
+    todos: null | TodosInfoType[],
     isToday: boolean,
 }
 
 type YearMonthType = {
     year: number,
     month: number,
+}
+
+type TodosInfoType = {
+    title: string,
+    content: string,
+    startDate: string | undefined,
+    dueDate: string[],
 }
 
 type DateType = {
@@ -78,7 +85,7 @@ function ExpCalendar() {
                 day: i,
                 dayOfWeek: dayOfWeek,
             }
-            const todosArray: string[] = [];
+            const todosInfo: TodosInfoType[] = [];
             // Search todos.dueDate match to Day or not, one by one.
             todos.forEach((todos) => {
                 const todosDate = todos.dueDate;
@@ -88,28 +95,34 @@ function ExpCalendar() {
 
                 const title = todos.cardTitle;
 
-                // Push title to todosArray if todosDate and I, which is the day, is match.
+                const newTodosInfo: TodosInfoType = {
+                    title: title,
+                    content: "",
+                    startDate: undefined,
+                    dueDate: splitedTodosDate,
+                }
+                
+                // Push title to todosInfo if todosDate and I, which is the day, is match.
                 if (i < 10 && (`${currentDate.year}` == splitedTodosDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDate[1])) {
                     const I = `0${i}`;
                     if (I === splitedTodosDate[2]) {
-                        todosArray.push(title);
+                        todosInfo.push(newTodosInfo);
                     }
                     return;
                 } else if ((`${currentDate.year}` == splitedTodosDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDate[1])){
                     const I = `${i}`;
                     if (I === splitedTodosDate[2]) {
-                        todosArray.push(title);
+                        todosInfo.push(newTodosInfo);
                     }
                     return;
                 }
             })
             // Check isToday, then append from head.
             if (dateOfToday.getDate() == i && (currentDate.year === dateOfToday.getFullYear()) && (currentDate.month === dateOfToday.getMonth())) {
-                newCurrentMonth.push({ day: newDate.day, todos: todosArray, isToday: true });
+                newCurrentMonth.push({ day: newDate.day, todos: todosInfo, isToday: true });
             } else {
-                newCurrentMonth.push({ day: newDate.day, todos: todosArray, isToday: false });
+                newCurrentMonth.push({ day: newDate.day, todos: todosInfo, isToday: false });
             }
-
         }
         setCurrentMonth([...newCurrentMonth]);
 
@@ -155,11 +168,11 @@ function ExpCalendar() {
                     <div id="calendarContainer">
                         <CalendarHeader />
                         {[...beforeMonth, ...currentMonth, ...afterMonth].map((renderArray) => (
-                            <div className={renderArray.isToday ? "testTrue" : "testFalse"}>
+                            <div className={renderArray.isToday ? "testTrue" : "testFalse"} onClick={() => (renderArray.todos)}>
                                 {renderArray.day}
                                 {renderArray.todos && renderArray.todos.map((todos) => (
                                     <div className="test">
-                                        {todos}
+                                        {todos.title}
                                     </div>
                                 ))}
                             </div>
