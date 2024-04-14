@@ -3,6 +3,20 @@
     flex-direction: column;
 }
 
-#innnerTableElement {
+#innerTableElement {
+    width: 200px;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: aqua;
 }
+
+#innerTableNoneElement {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: aqua;
+}
+
+/*background color is temporary*/

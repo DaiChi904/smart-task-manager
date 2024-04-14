@@ -57,16 +57,16 @@ function TodoApp() {
     const Date_Default = dueDate.current?.value;
     // Set formated string: YYYY-MM-DD-HH-MM-SS
     if (typeof Date_Default === null) {
-      console.log("An error has occuered")
+      console.log("Unexpected error has occuered in TodoApp compornent")
       return;
     } else if (typeof Date_Default === "string") {
       const Date_Formated = Date_Default.replace(/T|:/g, "-");
       setTodoDueDate(Date_Formated);
     } else if (typeof Date_Default === "object") {
-      console.log("An error has occuered")
+      console.log("Unexpected error has occuered in TodoApp compornent")
       return;
     } else if (typeof Date_Default === "undefined") {
-      console.log("An error has occuered")
+      console.log("Unexpected error has occuered in TodoApp compornent")
       return;
     }
     setTodoDateSetFieldShowStatus(false);

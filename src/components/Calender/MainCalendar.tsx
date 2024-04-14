@@ -65,7 +65,7 @@ function MainCalendar() {
     const [timeTableValue, setTimeTableValue] = useState<TodosInfoType[]>([])
     const handleSetTimeTable = (todos: TodosInfoType[] | null) => {
         if (todos === null) {
-            alert("An error has occured.")
+            alert("Unexpected error has occured.")
         } else {
             setTimeTableValue(todos);
         }
@@ -104,10 +104,9 @@ function MainCalendar() {
             // Search todos.dueDate match to Day or not, one by one.
             todos.forEach((todos) => {
                 const todosDate = todos.dueDate;
-                if (typeof todosDate !== "string") return alert("Unexpected error has ocuured.");
+                if (typeof todosDate !== "string") return;
                 // Splited Order is year[0], month[1], day[2], hour[3], minute[4].
                 const splitedTodosDate = todosDate.split("-");
-
 
                 const newTodosInfo: TodosInfoType = {
                     title: todos.cardTitle,
@@ -122,13 +121,11 @@ function MainCalendar() {
                     if (I === splitedTodosDate[2]) {
                         todosInfo.push(newTodosInfo);
                     }
-                    return;
                 } else if ((`${currentDate.year}` == splitedTodosDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDate[1])){
                     const I = `${i}`;
                     if (I === splitedTodosDate[2]) {
                         todosInfo.push(newTodosInfo);
                     }
-                    return;
                 }
             })
             // Check isToday, then append from head.
@@ -159,11 +156,13 @@ function MainCalendar() {
     return (
         <>
         <div id="entireContainer">
+
             <div id="entireCalendarContainer">
+
                 <div id="calendarMenu">
                     <div className="calendarMenuChild">
                         <div id="date">
-                            <b>{dateDisplayer(new Date(currentDate.year, currentDate.month))}</b>
+                            <b>{yearMonthDisplayer(new Date(currentDate.year, currentDate.month))}</b>
                         </div>
                     </div>
                     <div className="calendarMenuChild">
@@ -186,10 +185,13 @@ function MainCalendar() {
                         </div>
                     ))}
                 </div>
+
             </div>
+
             <div id="entireTimeTableContainer">
                 <OneDayTimeTable value={timeTableValue} />
             </div>
+
         </div>
         </>
     )
@@ -214,7 +216,7 @@ function CalendarHeader() {
     )
 }
 
-function dateDisplayer(date: Date) {
+function yearMonthDisplayer(date: Date) {
     const monthList: {[key: number]: string} = {
         0: "January",
         1: "February",
