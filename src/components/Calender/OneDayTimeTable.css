@@ -1,0 +1,9 @@
+#timeTableContiner {
+    display: flex;
+    flex-direction: column;
+}
+
+.test {
+    display: flex;
+    flex-direction: column;
+}

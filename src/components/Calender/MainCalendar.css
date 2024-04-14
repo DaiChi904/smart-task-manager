@@ -1,6 +1,6 @@
-#entireContainer {
+#entireCalendarContainer {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 #calendarContainer {
@@ -10,8 +10,9 @@
 
 #calendarMenu {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #date {
@@ -49,11 +50,6 @@
     flex-direction: column;
 }
 
-.leftFlex {
-    display: flex;
-    flex-direction: column;
-}
-
 .dateHolder {
     display: flex;
 }
@@ -68,11 +64,6 @@
     justify-content: center;
     align-items: center;
     margin: 0.5px;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
 }
 
 #calendarContainer {

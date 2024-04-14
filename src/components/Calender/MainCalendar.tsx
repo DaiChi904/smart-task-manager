@@ -5,12 +5,18 @@ import { todosAtom } from '../Memo_card/TodoApp';
 
 import { getLastDay, getBeforeMonth, getNextMonth, getDayOfWeek } from '../../utils/date';
 
-import "./expeliment.css";
+import "./MainCalendar.css";
+import OneDayTimeTable from './OneDayTimeTable';
 
 
 type CalendarType = {
     day: number,
-    todos: null | TodosInfoType[],
+    todos: null | {
+        title: string,
+        content: string,
+        startDate: string | undefined,
+        dueDate: string[],
+    }[],
     isToday: boolean,
 }
 
@@ -19,7 +25,7 @@ type YearMonthType = {
     month: number,
 }
 
-type TodosInfoType = {
+export type TodosInfoType = {
     title: string,
     content: string,
     startDate: string | undefined,
@@ -36,7 +42,7 @@ type DateType = {
 // Get date of today
 const dateOfToday = new Date();
 
-function ExpCalendar() {
+function MainCalendar() {
     // Get Atom
     const [todos, setTodos] = useAtom(todosAtom);
 
@@ -54,6 +60,16 @@ function ExpCalendar() {
     const handleSetNextMonth = () => {
         const nextDate = getNextMonth(new Date(currentDate.year, currentDate.month));
         setCurrentDate({ year: nextDate.getFullYear(), month: nextDate.getMonth() });
+    }
+
+    const handleSetTimeTable = (todos: TodosInfoType[] | null) => {
+        if (todos === null) {
+            alert("An error has occured.")
+        } else {
+            alert("Your action has done successfuly.");
+            console.log(todos);
+            <OneDayTimeTable value={todos} />
+        }
     }
 
     useEffect(() => {
@@ -93,11 +109,10 @@ function ExpCalendar() {
                 // Splited Order is year[0], month[1], day[2], hour[3], minute[4].
                 const splitedTodosDate = todosDate.split("-");
 
-                const title = todos.cardTitle;
 
                 const newTodosInfo: TodosInfoType = {
-                    title: title,
-                    content: "",
+                    title: todos.cardTitle,
+                    content: todos.cardContent,
                     startDate: undefined,
                     dueDate: splitedTodosDate,
                 }
@@ -144,48 +159,39 @@ function ExpCalendar() {
 
     return (
         <>
-            <div id="entireContainer">
-
-                <div className="container">
-                    
+            <div id="entireCalendarContainer">
+                <div id="calendarMenu">
+                    <div className="calendarMenuChild">
+                        <div id="date">
+                            <b>{dateDisplayer(new Date(currentDate.year, currentDate.month))}</b>
+                        </div>
+                    </div>
+                    <div className="calendarMenuChild">
+                        <button className="calendarMenuButton" onClick={handleSetBeforeMonth}><span><b>&lt;</b></span></button>
+                        <b>|</b>
+                        <button className="calendarMenuButton" onClick={handleSetNextMonth}><span><b>&gt;</b></span></button>
+                    </div>
                 </div>
-
-                <div className="container">
-                    
-                    <div id="calendarMenu">
-                        <div className="calendarMenuChild">
-                            <div id="date">
-                                <b>{dateDisplayer(new Date(currentDate.year, currentDate.month))}</b>
-                            </div>
+            
+                <div id="calendarContainer">
+                    <CalendarHeader />
+                    {[...beforeMonth, ...currentMonth, ...afterMonth].map((allMonth) => (
+                        <div className={allMonth.isToday ? "testTrue" : "testFalse"} onClick={() => handleSetTimeTable(allMonth.todos)}>
+                            {allMonth.day}
+                            {allMonth.todos && allMonth.todos.map((todos) => (
+                                <div className="test">
+                                    {todos.title}
+                                </div>
+                            ))}
                         </div>
-                        <div className="calendarMenuChild">
-                            <button className="calendarMenuButton" onClick={handleSetBeforeMonth}><span><b>&lt;</b></span></button>
-                            <b>|</b>
-                            <button className="calendarMenuButton" onClick={handleSetNextMonth}><span><b>&gt;</b></span></button>
-                        </div>
-                    </div>
-                    
-                    <div id="calendarContainer">
-                        <CalendarHeader />
-                        {[...beforeMonth, ...currentMonth, ...afterMonth].map((renderArray) => (
-                            <div className={renderArray.isToday ? "testTrue" : "testFalse"} onClick={() => (renderArray.todos)}>
-                                {renderArray.day}
-                                {renderArray.todos && renderArray.todos.map((todos) => (
-                                    <div className="test">
-                                        {todos.title}
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-
+                    ))}
                 </div>
             </div>
         </>
     )
 }
 
-export default ExpCalendar;
+export default MainCalendar;
 
 /**
  * Header of calendar

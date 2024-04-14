@@ -12,7 +12,7 @@ import {
 import { IonReactRouter } from '@ionic/react-router';
 import { calendar, ellipse, listCircle, listOutline, square, triangle } from 'ionicons/icons';
 import Tab1 from './pages/MemoCardList';
-import Tab2 from './pages/Calender';
+import Tab2 from './pages/Calendar';
 import Tab3 from './pages/Tab3';
 
 /* Core CSS required for Ionic components to work properly */
