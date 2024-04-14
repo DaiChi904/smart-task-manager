@@ -19,10 +19,7 @@ const Tab2: React.FC = () => {
             <IonTitle size="large">Tab 2</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <div id="entireContainer">
             <MainCalendar />
-            <OneDayTimeTable />
-        </div>
       </IonContent>
     </IonPage>
   );

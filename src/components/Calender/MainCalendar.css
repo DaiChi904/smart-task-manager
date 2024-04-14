@@ -1,11 +1,15 @@
-#entireCalendarContainer {
-    display: flex;
-    flex-direction: column;
-}
-
-#calendarContainer {
+/* Entire */
+#entireContainer {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Calendar */
+#entirecalendarContainer {
+    display: flex;
+    flex-direction: column;
 }
 
 #calendarMenu {
@@ -13,6 +17,14 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+#calendarContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 #date {
@@ -66,10 +78,10 @@
     margin: 0.5px;
 }
 
-#calendarContainer {
+/* TimeTable */
+#entireTimeTableContainer {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
 }
+
+

@@ -62,13 +62,12 @@ function MainCalendar() {
         setCurrentDate({ year: nextDate.getFullYear(), month: nextDate.getMonth() });
     }
 
+    const [timeTableValue, setTimeTableValue] = useState<TodosInfoType[]>([])
     const handleSetTimeTable = (todos: TodosInfoType[] | null) => {
         if (todos === null) {
             alert("An error has occured.")
         } else {
-            alert("Your action has done successfuly.");
-            console.log(todos);
-            <OneDayTimeTable value={todos} />
+            setTimeTableValue(todos);
         }
     }
 
@@ -159,6 +158,7 @@ function MainCalendar() {
 
     return (
         <>
+        <div id="entireContainer">
             <div id="entireCalendarContainer">
                 <div id="calendarMenu">
                     <div className="calendarMenuChild">
@@ -187,6 +187,10 @@ function MainCalendar() {
                     ))}
                 </div>
             </div>
+            <div id="entireTimeTableContainer">
+                <OneDayTimeTable value={timeTableValue} />
+            </div>
+        </div>
         </>
     )
 }

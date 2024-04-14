@@ -3,7 +3,6 @@
     flex-direction: column;
 }
 
-.test {
+#innnerTableElement {
     display: flex;
-    flex-direction: column;
 }
