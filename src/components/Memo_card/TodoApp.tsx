@@ -11,26 +11,35 @@ import "./TodoApp.css"
 import { notificationsOutline } from 'ionicons/icons';
 import { atom, useAtom } from "jotai";
 
+export type MordalType = boolean;
 
-export type CardValue = {
+export type CardValueType = {
   id: number;
   cardTitle: string;
   cardContent: string;
   checked: boolean;
-  startDate?: null | string | string[] | undefined;
-  dueDate?: null | string | string[] | undefined;
+  startDate: null | string | string[] | undefined;
+  dueDate: null | string | string[] | undefined;
 }
-export const todosAtom = atom<CardValue[]>([])
+export const todosAtom = atom<CardValueType[]>([])
 
+export const isOtherMordalOpenAtom = atom<MordalType>(false);
 
 function TodoApp() {
   // States which are related to show or hide input field by pressing paticular elements.
-  const [todoInputFieldShowStatus, setTodoInputFieldShowStatus] = useState(false);
+  const [isOtherMordalOpen, setIsOtherMordalOpen] = useAtom(isOtherMordalOpenAtom)
   const [todoDateSetFieldShowStatus, setTodoDateSetFieldShowStatus] = useState(false);
+
+  const [isAddMordalOpen, setIsAddMordalOpen] = useState<MordalType>(false);
 
 
   const handeleShowTodoInputField = () => {
-    setTodoInputFieldShowStatus(true)
+    if (isOtherMordalOpen === false) {
+      setIsOtherMordalOpen(true);
+      setIsAddMordalOpen(true);
+    } else {
+      alert("Other input mordal is opening")
+    }
   }
 
   // Get input Values of card
@@ -85,25 +94,27 @@ function TodoApp() {
   const handleAdd = (add: { preventDefault: () => void; }) => {
     // Cancel action if more than one text input field is empty. 
     if (inputTitleValue === "" || inputContentValue === "") {
-      setTodoInputFieldShowStatus(false);
+      setIsOtherMordalOpen(false);
+      setIsAddMordalOpen(false);
       // Initialize inputTitleValue and inputContentValue
       setInputTitleValue("");
       setInputContentValue("");
       alert("Your action has been canceled due to lack of the title or the content.")
-      return;
     } else {
       add.preventDefault();
-      const newTodo: CardValue = {
+      const newTodo: CardValueType = {
         id: todos.length,
         cardTitle: inputTitleValue,
         cardContent: inputContentValue,
         checked: false,
+        startDate: null,
         dueDate: todoDueDate,
       };
       // Creae new Todo array
       setTodos([newTodo, ...todos]);
       // Hide todo input field
-      setTodoInputFieldShowStatus(false);
+      setIsOtherMordalOpen(false);
+      setIsAddMordalOpen(false);
       // Initialize inputValues
       setInputTitleValue("");
       setInputContentValue("");
@@ -113,7 +124,8 @@ function TodoApp() {
 
   // Cancel adding Todo
   const handleCancel = () => {
-    setTodoInputFieldShowStatus(false);
+    setIsOtherMordalOpen(false);
+      setIsAddMordalOpen(false);
     // Initialize inputValues
     setInputTitleValue("");
     setInputContentValue("");
@@ -135,7 +147,7 @@ function TodoApp() {
 
         <CardList />
 
-      <div className={todoInputFieldShowStatus ? "show" : "hidden"}>
+      <div className={isAddMordalOpen  ? "show" : "hidden"}>
         <div className="CreateTodoContainer">
           <IonCard className="PendingCard">
             <IonIcon id="Notifaction" aria-hidden="true" icon={notificationsOutline} onClick={handleShowDateSetField}></IonIcon>

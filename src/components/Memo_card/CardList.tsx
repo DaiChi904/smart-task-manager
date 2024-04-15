@@ -5,10 +5,10 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, 
 import { IonDatetime, IonDatetimeButton } from '@ionic/react';
 import { IonButton, IonButtons } from '@ionic/react'
 
-import { CardValue } from "./TodoApp";
+import { CardValueType } from "./TodoApp";
 import { notificationsOutline } from "ionicons/icons";
 import { useAtom } from "jotai";
-import { todosAtom } from "./TodoApp";
+import { todosAtom, isOtherMordalOpenAtom, MordalType } from "./TodoApp";
 
 // This type definition is needless at this time, but leaveing it unchanged just in case.
 type CardProps = {
@@ -69,26 +69,32 @@ function CardList() {
   const [editTodoDueDate, setEditTodoDueDate] = useState<null | string | string[] | undefined>(null);
 
   // States which are related to show or hide input field by pressing paticular elements.
-  const [showStatus, setShowStatus] = useState(false);
+  const [isOtherMordalOpen, setIsOtherMordalOpen] = useAtom<MordalType>(isOtherMordalOpenAtom)
+  const [isEditMordalOpen, setIsEditMordalOpen] = useState<MordalType>(false)
   const [todoDateSetFieldShowStatus, setTodoDateSetFieldShowStatus] = useState(false);
 
   // !Important: The type of dueDate should be fixed.
   const handleEdit = (id: number, cardTitle: string, cardContent: string, dueDate: null | string | string[] | undefined) => {
-    alert("You clicked card");
-    setShowStatus(true);
-    setEditTitleValue(cardTitle);
-    setEditContentValue(cardContent);
-    setEditTodoDueDate(dueDate);
-    setEditingCardID(id);
+    if (isOtherMordalOpen === false) {
+      setIsOtherMordalOpen(true);
+      setIsEditMordalOpen(true);
+      setEditTitleValue(cardTitle);
+      setEditContentValue(cardContent);
+      setEditTodoDueDate(dueDate);
+      setEditingCardID(id);
+    } else {
+      alert("Other input mordal is opening")
+    }
   }
 
   const handleConfirmEdit = () => {
     // Create new edited card
-    const newTodo: CardValue = {
+    const newTodo: CardValueType = {
       id: todos.length,
       cardTitle: editTitleValue,
       cardContent: editContentValue,
       checked: false,
+      startDate: null,
       dueDate: editTodoDueDate,
     };
     // Delete the card which is pre-edited
@@ -102,8 +108,9 @@ function CardList() {
     // Create editied todos array
     setTodos([newTodo, ...pendingTodos]);
 
-    // 関数化してきれいにできそう
-    setShowStatus(false);
+    // きれいにできそう
+    setIsOtherMordalOpen(false);
+    setIsEditMordalOpen(false);
     setEditTitleValue("");
     setEditContentValue("");
     setEditTodoDueDate(null);
@@ -111,7 +118,8 @@ function CardList() {
   }
 
   const handleCancelEdit = () => {
-    setShowStatus(false);
+    setIsOtherMordalOpen(false);
+    setIsEditMordalOpen(false);
     setEditTitleValue("");
     setEditContentValue("");
     setEditTodoDueDate(null);
@@ -121,7 +129,7 @@ function CardList() {
   const handleDelete = () => {
     const pendingTodos = todos.filter((pendingtodos) => {
       if (pendingtodos.id === editingCardID) {
-        return false
+        return false;
       } else {
         return pendingtodos;
       };
@@ -129,7 +137,8 @@ function CardList() {
     // Significant bug exist. It is needed to investigate. Maybe it is because of id is set by todos(array) length. It needs completely unique id.
     setTodos([...pendingTodos]);
     
-    setShowStatus(false);
+    setIsOtherMordalOpen(false);
+    setIsEditMordalOpen(false);
     setEditTitleValue("");
     setEditContentValue("");
     setEditTodoDueDate(null);
@@ -153,7 +162,7 @@ function CardList() {
         ))}
       </div>
 
-      <div className={showStatus ? "show" : "hidden"}>
+      <div className={isEditMordalOpen ? "show" : "hidden"}>
         <div className="CreateTodoContainer">
           <IonCard className="PendingCard">
             <IonCardHeader>
