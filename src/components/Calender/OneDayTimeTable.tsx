@@ -1,19 +1,27 @@
-import { useState } from "react";
-import { TodosInfoType } from "./MainCalendar";
+import { DateType, TodosInfoType } from "./MainCalendar";
 import "./OneDayTimeTable.css";
 
-function OneDayTimeTable({value}: {value: TodosInfoType[]}) {
-    console.log(value);
-    if (value.length <= 0) {
+function OneDayTimeTable(value: { todosValue: TodosInfoType[]; selectedDate: DateType; }) {
+    const {todosValue, selectedDate}: {todosValue: TodosInfoType[], selectedDate: DateType} = value;
+    console.log(todosValue);
+    if (todosValue.length <= 0) {
         console.log("No todos!")
         return(
-            <NoElement />
+            <>
+                <div>
+                    {`${selectedDate.day}.${selectedDate.month}.${selectedDate.year}`}
+                </div>
+                <NoElement />
+            </>
         )
     } else {
         return(
             <>
+                <div>
+                    {`${selectedDate.day}.${selectedDate.month}.${selectedDate.year}`}
+                </div>
                 <div id="timeTableContainer">
-                    {value && value.map((todos) => (
+                    {todosValue && todosValue.map((todos) => (
                         <div id="innerTableElement">
                             <h1>{todos.title}</h1>
                             <p>{todos.content}</p>
