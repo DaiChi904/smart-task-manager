@@ -23,6 +23,7 @@ export type CardValueType = {
 }
 export const todosAtom = atom<CardValueType[]>([])
 
+// Value to juage other mordal is opening or not.
 export const isOtherMordalOpenAtom = atom<MordalType>(false);
 
 function TodoApp() {
@@ -31,6 +32,7 @@ function TodoApp() {
   const [isAddMordalOpen, setIsAddMordalOpen] = useState<MordalType>(false);
   const [todoDateSetFieldShowStatus, setTodoDateSetFieldShowStatus] = useState(false);
 
+  // Values related to creating cards.
   const [inputTitleValue, setInputTitleValue] = useState("");
   const [inputContentValue, setInputContentValue] = useState("");
   const [todoDueDate, setTodoDueDate] = useState<null | string | string[] | undefined>(null);
@@ -46,7 +48,7 @@ function TodoApp() {
     }
   }
 
-  // Get input Values of card
+  // Get input Values of card.
   const handeleTitleChange = (input: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputTitleValue(input.target.value)
   }
@@ -68,7 +70,7 @@ function TodoApp() {
   const DateConfirm = () => {
     dueDate.current?.confirm();
     const Date_Default = dueDate.current?.value;
-    // Set formated string: YYYY-MM-DD-HH-MM-SS
+    // Set formated string: YYYY-MM-DD-HH-MM-SS.
     if (typeof Date_Default === null) {
       console.log("Unexpected error has occuered in TodoApp compornent")
       return;
@@ -98,9 +100,10 @@ function TodoApp() {
   const handleAdd = (add: { preventDefault: () => void; }) => {
     // Cancel action if more than one text input field is empty. 
     if (inputTitleValue === "" || inputContentValue === "") {
+      // Hide todo input field
       setIsOtherMordalOpen(false);
       setIsAddMordalOpen(false);
-      // Initialize inputTitleValue and inputContentValue
+      // Initialize inputTitleValue and inputContentValue.
       setInputTitleValue("");
       setInputContentValue("");
       alert("Your action has been canceled due to lack of the title or the content.")
@@ -114,30 +117,30 @@ function TodoApp() {
         startDate: null,
         dueDate: todoDueDate,
       };
-      // Create new Todo array
+      // Create new Todo array.
       setTodos([newTodo, ...todos]);
-      // Hide todo input field
+      // Hide todo input field.
       setIsOtherMordalOpen(false);
       setIsAddMordalOpen(false);
-      // Initialize inputValues
+      // Initialize inputValues.
       setInputTitleValue("");
       setInputContentValue("");
       setTodoDueDate(null);
     }
   }
 
-  // Cancel adding Todo
+  // Cancel adding Todo.
   const handleCancel = () => {
-    // Hide todo input field
+    // Hide todo input field.
     setIsOtherMordalOpen(false);
     setIsAddMordalOpen(false);
-    // Initialize inputValues
+    // Initialize inputValues.
     setInputTitleValue("");
     setInputContentValue("");
     setTodoDueDate(null);
   }
 
-  // Debug
+  // Debug.
   useEffect(() => {
     console.log(todos);
   }, [todos])
