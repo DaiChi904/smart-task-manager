@@ -28,13 +28,17 @@ export const isOtherMordalOpenAtom = atom<MordalType>(false);
 function TodoApp() {
   // States which are related to show or hide input field by pressing paticular elements.
   const [isOtherMordalOpen, setIsOtherMordalOpen] = useAtom(isOtherMordalOpenAtom)
+  const [isAddMordalOpen, setIsAddMordalOpen] = useState<MordalType>(false);
   const [todoDateSetFieldShowStatus, setTodoDateSetFieldShowStatus] = useState(false);
 
-  const [isAddMordalOpen, setIsAddMordalOpen] = useState<MordalType>(false);
-
+  const [inputTitleValue, setInputTitleValue] = useState("");
+  const [inputContentValue, setInputContentValue] = useState("");
+  const [todoDueDate, setTodoDueDate] = useState<null | string | string[] | undefined>(null);
+  const [todos, setTodos] = useAtom(todosAtom);
 
   const handeleShowTodoInputField = () => {
     if (isOtherMordalOpen === false) {
+      // Show todo input field
       setIsOtherMordalOpen(true);
       setIsAddMordalOpen(true);
     } else {
@@ -110,7 +114,7 @@ function TodoApp() {
         startDate: null,
         dueDate: todoDueDate,
       };
-      // Creae new Todo array
+      // Create new Todo array
       setTodos([newTodo, ...todos]);
       // Hide todo input field
       setIsOtherMordalOpen(false);
@@ -124,18 +128,14 @@ function TodoApp() {
 
   // Cancel adding Todo
   const handleCancel = () => {
+    // Hide todo input field
     setIsOtherMordalOpen(false);
-      setIsAddMordalOpen(false);
+    setIsAddMordalOpen(false);
     // Initialize inputValues
     setInputTitleValue("");
     setInputContentValue("");
     setTodoDueDate(null);
   }
-
-  const [inputTitleValue, setInputTitleValue] = useState("");
-  const [inputContentValue, setInputContentValue] = useState("");
-  const [todoDueDate, setTodoDueDate] = useState<null | string | string[] | undefined>(null);
-  const [todos, setTodos] = useAtom(todosAtom);
 
   // Debug
   useEffect(() => {
