@@ -79,12 +79,12 @@ function MainCalendar() {
         // Array of day of manth before currentMonth
         const beforeDate = getBeforeMonth(new Date(currentDate.year, currentDate.month));
         for (let bi: number = getLastDay(beforeDate.getMonth()); bi > getLastDay(beforeDate.getMonth()) - getDayOfWeek(new Date(currentDate.year, currentDate.month, 1)); bi--) {
-            const dayOfWeek = getDayOfWeek(new Date());
+            const newDayOfWeek = getDayOfWeek(new Date());
             const newDate: DateType = {
                 year: beforeDate.getFullYear(),
                 month: beforeDate.getMonth(),
                 day: bi,
-                dayOfWeek: dayOfWeek,
+                dayOfWeek: newDayOfWeek,
             }
             // append from tail
             newBeforeMonth.unshift({ day: newDate.day, todos: null, isToday: false });
@@ -93,12 +93,12 @@ function MainCalendar() {
 
         // Array of day of current Month
         for (let i: number = 1; i <= getLastDay(currentDate.month); i++) {
-            const dayOfWeek = getDayOfWeek(new Date(currentDate.year, currentDate.month, i));
+            const newDayOfWeek = getDayOfWeek(new Date(currentDate.year, currentDate.month, i));
             const newDate: DateType = {
                 year: currentDate.year,
                 month: currentDate.month,
                 day: i,
-                dayOfWeek: dayOfWeek,
+                dayOfWeek: newDayOfWeek,
             }
             const todosInfo: TodosInfoType[] = [];
             // Search todos.dueDate match to Day or not, one by one.
@@ -140,12 +140,12 @@ function MainCalendar() {
         // Array of day of manth after currentMonth
         const afterDate = getNextMonth(new Date(currentDate.year, currentDate.month));
         for (let ai: number = 1; ai <= 42 - newCurrentMonth.length - newBeforeMonth.length; ai++) {
-            const dayOfWeek = getDayOfWeek(new Date(afterDate.getFullYear(), afterDate.getMonth(), ai));
+            const newDayOfWeek = getDayOfWeek(new Date(afterDate.getFullYear(), afterDate.getMonth(), ai));
             const newDate: DateType = {
                 year: afterDate.getFullYear(),
                 month: afterDate.getMonth(),
                 day: ai,
-                dayOfWeek: dayOfWeek,
+                dayOfWeek: newDayOfWeek,
             }
             // append from head
             newAfterMonth.push({ day: newDate.day, todos: null, isToday: false });
