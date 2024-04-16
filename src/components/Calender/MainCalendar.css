@@ -46,7 +46,7 @@
 .testTrue {
     display: flex;
     width: calc(95%/7);
-    height: 85px;
+    height: 95px;
     border: solid 1px black;
     margin: 0.5px;
     flex-direction: column;
@@ -56,7 +56,7 @@
 .testFalse {
     display: flex;
     width: calc(95%/7);
-    height: 85px;
+    height: 95px;
     border: solid 1px black;
     margin: 0.5px;
     flex-direction: column;

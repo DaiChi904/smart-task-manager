@@ -18,6 +18,10 @@ type CalendarType = {
         dueDate: string[],
     }[],
     isToday: boolean,
+    ShowLimit: {
+        isShowLimitActive: boolean,
+        limitedTodos: string[] | null,
+    }
 }
 
 type YearMonthType = {
@@ -87,7 +91,7 @@ function MainCalendar() {
                 dayOfWeek: newDayOfWeek,
             }
             // append from tail
-            newBeforeMonth.unshift({ day: newDate.day, todos: null, isToday: false });
+            newBeforeMonth.unshift({ day: newDate.day, todos: null, isToday: false, ShowLimit: {isShowLimitActive: false, limitedTodos: null,},});
         }
         setBeforeMonth([...newBeforeMonth]);
 
@@ -128,12 +132,35 @@ function MainCalendar() {
                     }
                 }
             })
-            // Check isToday, then append from head.
-            if (dateOfToday.getDate() == i && (currentDate.year === dateOfToday.getFullYear()) && (currentDate.month === dateOfToday.getMonth())) {
-                newCurrentMonth.push({ day: newDate.day, todos: todosInfo, isToday: true });
-            } else {
-                newCurrentMonth.push({ day: newDate.day, todos: todosInfo, isToday: false });
+            const limitedTodosArray: string[] = [];
+            if (todosInfo.length > 3) {
+                todosInfo.forEach((todos, index) => {
+                    if (index >= todosInfo.length) return;
+                    if (index >= 3) {
+                        limitedTodosArray.pop();
+                        limitedTodosArray.push(`${todosInfo.length - 2} todos remaining`);
+                    } else {
+                        limitedTodosArray.push(todos.title);
+                    }
+                })
             }
+            
+            // Cheack isShowLimitActive is true or false.
+            if (todosInfo.length > 3) {
+                // Check isToday, then append from head.
+                if (dateOfToday.getDate() == i && (currentDate.year === dateOfToday.getFullYear()) && (currentDate.month === dateOfToday.getMonth())) {
+                    newCurrentMonth.push({ day: newDate.day, todos: todosInfo, isToday: true, ShowLimit: {isShowLimitActive: true, limitedTodos: limitedTodosArray,},});
+                } else {
+                    newCurrentMonth.push({ day: newDate.day, todos: todosInfo, isToday: false, ShowLimit: {isShowLimitActive: true, limitedTodos: limitedTodosArray,},});
+                }
+            } else {
+                // Check isToday, then append from head.
+                if (dateOfToday.getDate() == i && (currentDate.year === dateOfToday.getFullYear()) && (currentDate.month === dateOfToday.getMonth())) {
+                    newCurrentMonth.push({ day: newDate.day, todos: todosInfo, isToday: true, ShowLimit: {isShowLimitActive: false, limitedTodos: null,},});
+                } else {
+                    newCurrentMonth.push({ day: newDate.day, todos: todosInfo, isToday: false, ShowLimit: {isShowLimitActive: false, limitedTodos: null,},});
+                }
+            }    
         }
         setCurrentMonth([...newCurrentMonth]);
 
@@ -148,7 +175,7 @@ function MainCalendar() {
                 dayOfWeek: newDayOfWeek,
             }
             // append from head
-            newAfterMonth.push({ day: newDate.day, todos: null, isToday: false });
+            newAfterMonth.push({ day: newDate.day, todos: null, isToday: false, ShowLimit: {isShowLimitActive: false, limitedTodos: null,},});
         }
         setAfterMonth([...newAfterMonth]);
     }, [todos, currentDate]);
@@ -177,7 +204,11 @@ function MainCalendar() {
                     {[...beforeMonth, ...currentMonth, ...afterMonth].map((allMonth) => (
                         <div className={allMonth.isToday ? "testTrue" : "testFalse"} onClick={() => handleSetTimeTable(allMonth.todos)}>
                             {allMonth.day}
-                            {allMonth.todos && allMonth.todos.map((todos) => (
+                            {allMonth.ShowLimit.isShowLimitActive ? allMonth.ShowLimit.limitedTodos && allMonth.ShowLimit.limitedTodos.map((limitedTodos) => (
+                                <div className="test">
+                                    {limitedTodos}
+                                </div>
+                            )) : allMonth.todos && allMonth.todos.map((todos) => (
                                 <div className="test">
                                     {todos.title}
                                 </div>
