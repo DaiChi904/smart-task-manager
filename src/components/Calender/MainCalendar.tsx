@@ -59,6 +59,7 @@ function MainCalendar() {
     const [beforeMonth, setBeforeMonth] = useState<CalendarType[]>([]);
     const [afterMonth, setAfterMonth] = useState<CalendarType[]>([]);
 
+    // Values related to <oneDayTimeTabe />.
     const [timeTableValue, setTimeTableValue] = useState<TodosInfoType[]>([]);
     const [timeTableSelectedDate, setTimeTableSelectedDate] = useState<DateType>({year: dateOfToday.getFullYear(), month: dateOfToday.getMonth(), day: dateOfToday.getDate(), dayOfWeek: dateOfToday.getDay()});
 
@@ -140,6 +141,8 @@ function MainCalendar() {
                     }
                 }
             })
+
+            // Create string[] if todosInfo.lengh is more than 4
             const limitedTodosArray: string[] = [];
             if (todosInfo.length > 3) {
                 todosInfo.forEach((todos, index) => {
