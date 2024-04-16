@@ -1,6 +1,5 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import TodoApp from '../components/Memo_card/TodoApp';
-
+import { IonContent, IonFooter, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import TodoApp from '../components/Todo/TodoApp';
 
 const Tab1: React.FC = () => {
   return (
@@ -10,9 +9,9 @@ const Tab1: React.FC = () => {
           <IonTitle>Memo Card List</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
-        <TodoApp />
-      </IonContent>
+
+      <TodoApp />
+
     </IonPage>
   );
 };

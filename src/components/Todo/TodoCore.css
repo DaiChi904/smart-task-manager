@@ -3,26 +3,12 @@
     flex-direction: column;
 }
 
-#TodoAdd {
-    font-size: 20px;
-    position: fixed;
-    right: 10px;
-    bottom: 10px;
-    display: block;
-    width: 120px;
-    height: 30px;
-    background-color: blue;
-    color: aliceblue;
-    border-radius: 10px;
-}
-
 .Card {
     width: 450px;
     height: 250px;
     display: flex;
     flex-direction: column;
 }
-
 
 
 .CardList {
@@ -55,7 +41,7 @@
     resize: none;
 }
 
-.CreateTodoContainer {
+.PendingCardContainer {
     display: flex;
     flex-direction: row;
     position: fixed;
@@ -77,7 +63,6 @@
     align-items: center;
     justify-content: center;
     /* By doing below, it can display input field in ceneter of the window. But I don't know why. */
-
 }
 
 .CardMenu {
@@ -134,7 +119,7 @@
 }
 
 
-/* なんでや阪神関係ないやろ！！！！ */
+/* リファクタリングにより不要になりました。つまり阪神ということです。 */
 .show {
     opacity: 1;
     z-index: 334;

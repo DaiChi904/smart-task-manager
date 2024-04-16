@@ -1,33 +1,24 @@
 // Management and Editing for Todos.
 
-import { useState, useContext, useRef, MouseEvent, SetStateAction } from "react";
+import { useState, useRef } from "react";
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon } from '@ionic/react';
 import { IonDatetime, IonDatetimeButton } from '@ionic/react';
 import { IonButton, IonButtons } from '@ionic/react'
-
-import { CardValueType } from "./TodoApp";
 import { notificationsOutline } from "ionicons/icons";
+
 import { useAtom } from "jotai";
-import { todosAtom, isOtherMordalOpenAtom, MordalType } from "./TodoApp";
 
-// This type definition is needless at this time, but leaveing it unchanged just in case.
-type CardProps = {
-  todos:{
-    id: number;
-    cardTitle: string;
-    cardContent: string;
-    checked: boolean;
-  }[]
-}
+import { CardValueType } from "./CardCreater";
+import { todosAtom, MordalType } from "./CardCreater";
+import { isOtherMordalOpenAtom } from "./TodoApp";
 
-function CardList() {
+function CardManager() {
   // States which are related to show or hide input field by pressing paticular elements.
-  const [isOtherMordalOpen, setIsOtherMordalOpen] = useAtom<MordalType>(isOtherMordalOpenAtom)
-  const [isEditMordalOpen, setIsEditMordalOpen] = useState<MordalType>(false)
+  const [isOtherMordalOpen, setIsOtherMordalOpen] = useAtom<MordalType>(isOtherMordalOpenAtom);
   const [todoDateSetFieldShowStatus, setTodoDateSetFieldShowStatus] = useState(false);
 
+  const [todos, setTodos] = useAtom(todosAtom);
   // Values related to editing cards.
-  const [todos, setTodos] = useAtom(todosAtom)
   const [editTitleValue, setEditTitleValue] = useState("");
   const [editContentValue, setEditContentValue] = useState("");
   const [editingCardID, setEditingCardID] = useState<number>(NaN);
@@ -90,7 +81,6 @@ function CardList() {
   const handleEdit = (id: number, cardTitle: string, cardContent: string, startDate: null | string | string[] | undefined, dueDate: null | string | string[] | undefined) => {
     if (isOtherMordalOpen === false) {
       setIsOtherMordalOpen(true);
-      setIsEditMordalOpen(true);
       setEditTitleValue(cardTitle);
       setEditContentValue(cardContent);
       setEditTodoDueDate(dueDate);
@@ -124,7 +114,6 @@ function CardList() {
     // きれいにできそう
     // Hide todo input field.
     setIsOtherMordalOpen(false);
-    setIsEditMordalOpen(false);
     // Initialize editValues.
     setEditTitleValue("");
     setEditContentValue("");
@@ -135,7 +124,6 @@ function CardList() {
   const handleCancelEdit = () => {
     // Hide todo input field.
     setIsOtherMordalOpen(false);
-    setIsEditMordalOpen(false);
     // Initialize editValues.
     setEditTitleValue("");
     setEditContentValue("");
@@ -156,7 +144,6 @@ function CardList() {
     
     // Hide todo input field.
     setIsOtherMordalOpen(false);
-    setIsEditMordalOpen(false);
     // Initialize editValues.
     setEditTitleValue("");
     setEditContentValue("");
@@ -181,8 +168,8 @@ function CardList() {
         ))}
       </div>
 
-      <div className={isEditMordalOpen ? "show" : "hidden"}>
-        <div className="CreateTodoContainer">
+      {isOtherMordalOpen ? 
+        <div className="PendingCardContainer">
           <IonCard className="PendingCard">
             <IonCardHeader>
               <IonIcon id="Notifaction" aria-hidden="true" icon={notificationsOutline} onClick={handleShowDateSetField}></IonIcon>
@@ -220,10 +207,10 @@ function CardList() {
               </IonDatetime>
             </div>
           </div>
-        </div>
-      </div>
+        </div> : <></>}
+
     </div>
   );
 }
 
-export default CardList;
+export default CardManager;

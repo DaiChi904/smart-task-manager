@@ -1,15 +1,15 @@
 // Core part of this App. Create new todos and displying Todo List is main role of this Compornent. Additionaly, the core content of Todos and setTodos, which is this App, is difined in this compornent as a TodosContext.
 
-import { useState, createContext, useRef, FormEvent, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon } from '@ionic/react';
 import { IonDatetime } from "@ionic/react";
 import { IonButtons, IonButton } from "@ionic/react";
-import CardList from "./CardList";
 
 import "./TodoApp.css"
 
 import { notificationsOutline } from 'ionicons/icons';
 import { atom, useAtom } from "jotai";
+import { isOtherMordalOpenAtom } from "./TodoApp";
 
 export type MordalType = boolean;
 
@@ -21,15 +21,12 @@ export type CardValueType = {
   startDate: null | string | string[] | undefined;
   dueDate: null | string | string[] | undefined;
 }
-export const todosAtom = atom<CardValueType[]>([])
 
-// Value to juage other mordal is opening or not.
-export const isOtherMordalOpenAtom = atom<MordalType>(false);
+export const todosAtom = atom<CardValueType[]>([]);
 
 function TodoApp() {
   // States which are related to show or hide input field by pressing paticular elements.
-  const [isOtherMordalOpen, setIsOtherMordalOpen] = useAtom(isOtherMordalOpenAtom)
-  const [isAddMordalOpen, setIsAddMordalOpen] = useState<MordalType>(false);
+  const [isOtherMordalOpen, setIsOtherMordalOpen] = useAtom(isOtherMordalOpenAtom);
   const [todoDateSetFieldShowStatus, setTodoDateSetFieldShowStatus] = useState(false);
 
   // Values related to creating cards.
@@ -37,16 +34,6 @@ function TodoApp() {
   const [inputContentValue, setInputContentValue] = useState("");
   const [todoDueDate, setTodoDueDate] = useState<null | string | string[] | undefined>(null);
   const [todos, setTodos] = useAtom(todosAtom);
-
-  const handeleShowTodoInputField = () => {
-    if (isOtherMordalOpen === false) {
-      // Show todo input field
-      setIsOtherMordalOpen(true);
-      setIsAddMordalOpen(true);
-    } else {
-      alert("Other input mordal is opening")
-    }
-  }
 
   // Get input Values of card.
   const handeleTitleChange = (input: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -102,7 +89,6 @@ function TodoApp() {
     if (inputTitleValue === "" || inputContentValue === "") {
       // Hide todo input field
       setIsOtherMordalOpen(false);
-      setIsAddMordalOpen(false);
       // Initialize inputTitleValue and inputContentValue.
       setInputTitleValue("");
       setInputContentValue("");
@@ -121,7 +107,6 @@ function TodoApp() {
       setTodos([newTodo, ...todos]);
       // Hide todo input field.
       setIsOtherMordalOpen(false);
-      setIsAddMordalOpen(false);
       // Initialize inputValues.
       setInputTitleValue("");
       setInputContentValue("");
@@ -133,25 +118,16 @@ function TodoApp() {
   const handleCancel = () => {
     // Hide todo input field.
     setIsOtherMordalOpen(false);
-    setIsAddMordalOpen(false);
     // Initialize inputValues.
     setInputTitleValue("");
     setInputContentValue("");
     setTodoDueDate(null);
   }
-
-  // Debug.
-  useEffect(() => {
-    console.log(todos);
-  }, [todos])
+  
+  console.log(todos);
 
   return(
-    <div className="Container">
-
-        <CardList />
-
-      <div className={isAddMordalOpen  ? "show" : "hidden"}>
-        <div className="CreateTodoContainer">
+        <div className="PendingCardContainer">
           <IonCard className="PendingCard">
             <IonIcon id="Notifaction" aria-hidden="true" icon={notificationsOutline} onClick={handleShowDateSetField}></IonIcon>
             <IonCardHeader>
@@ -189,9 +165,6 @@ function TodoApp() {
             </div>
           </div>
         </div>
-      </div>
-      <button id="TodoAdd" onClick={handeleShowTodoInputField}><b>Add Task</b></button>
-    </div>
   );
 }
 

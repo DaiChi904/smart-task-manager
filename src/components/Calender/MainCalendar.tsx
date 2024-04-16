@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import { useAtom } from 'jotai';
-import { todosAtom } from '../Memo_card/TodoApp';
+
+import { todosAtom } from '../Todo/CardCreater';
 
 import { getLastDay, getBeforeMonth, getNextMonth, getDayOfWeek } from '../../utils/date';
 
@@ -61,7 +62,7 @@ function MainCalendar() {
 
     // Values related to <oneDayTimeTabe />.
     const [timeTableValue, setTimeTableValue] = useState<TodosInfoType[]>([]);
-    const [timeTableSelectedDate, setTimeTableSelectedDate] = useState<DateType>({year: dateOfToday.getFullYear(), month: dateOfToday.getMonth(), day: dateOfToday.getDate(), dayOfWeek: dateOfToday.getDay()});
+    const [timeTableSelectedDate, setTimeTableSelectedDate] = useState<DateType>({ year: dateOfToday.getFullYear(), month: dateOfToday.getMonth(), day: dateOfToday.getDate(), dayOfWeek: dateOfToday.getDay() });
 
     // Date of year and month which is selected
     const [currentDate, setCurrentDate] = useState<YearMonthType>({ year: dateOfToday.getFullYear(), month: dateOfToday.getMonth() });
@@ -100,7 +101,7 @@ function MainCalendar() {
                 dayOfWeek: newDayOfWeek,
             }
             // append from tail
-            newBeforeMonth.unshift({ date: newDate, todos: null, isToday: false, ShowLimit: {isShowLimitActive: false, limitedTodos: null,},});
+            newBeforeMonth.unshift({ date: newDate, todos: null, isToday: false, ShowLimit: { isShowLimitActive: false, limitedTodos: null, }, });
         }
         setBeforeMonth([...newBeforeMonth]);
 
@@ -127,14 +128,14 @@ function MainCalendar() {
                     startDate: undefined,
                     dueDate: splitedTodosDate,
                 }
-                
+
                 // Push title to todosInfo if todosDate and I, which is the day, is match.
                 if (i < 10 && (`${currentDate.year}` == splitedTodosDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDate[1])) {
                     const I = `0${i}`;
                     if (I === splitedTodosDate[2]) {
                         todosInfo.push(newTodosInfo);
                     }
-                } else if ((`${currentDate.year}` == splitedTodosDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDate[1])){
+                } else if ((`${currentDate.year}` == splitedTodosDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDate[1])) {
                     const I = `${i}`;
                     if (I === splitedTodosDate[2]) {
                         todosInfo.push(newTodosInfo);
@@ -155,23 +156,23 @@ function MainCalendar() {
                     }
                 })
             }
-            
+
             // Cheack isShowLimitActive is true or false.
             if (todosInfo.length > 3) {
                 // Check isToday, then append from head.
                 if (dateOfToday.getDate() == i && (currentDate.year === dateOfToday.getFullYear()) && (currentDate.month === dateOfToday.getMonth())) {
-                    newCurrentMonth.push({ date: newDate, todos: todosInfo, isToday: true, ShowLimit: {isShowLimitActive: true, limitedTodos: limitedTodosArray,},});
+                    newCurrentMonth.push({ date: newDate, todos: todosInfo, isToday: true, ShowLimit: { isShowLimitActive: true, limitedTodos: limitedTodosArray, }, });
                 } else {
-                    newCurrentMonth.push({ date: newDate, todos: todosInfo, isToday: false, ShowLimit: {isShowLimitActive: true, limitedTodos: limitedTodosArray,},});
+                    newCurrentMonth.push({ date: newDate, todos: todosInfo, isToday: false, ShowLimit: { isShowLimitActive: true, limitedTodos: limitedTodosArray, }, });
                 }
             } else {
                 // Check isToday, then append from head.
                 if (dateOfToday.getDate() == i && (currentDate.year === dateOfToday.getFullYear()) && (currentDate.month === dateOfToday.getMonth())) {
-                    newCurrentMonth.push({ date: newDate, todos: todosInfo, isToday: true, ShowLimit: {isShowLimitActive: false, limitedTodos: null,},});
+                    newCurrentMonth.push({ date: newDate, todos: todosInfo, isToday: true, ShowLimit: { isShowLimitActive: false, limitedTodos: null, }, });
                 } else {
-                    newCurrentMonth.push({ date: newDate, todos: todosInfo, isToday: false, ShowLimit: {isShowLimitActive: false, limitedTodos: null,},});
+                    newCurrentMonth.push({ date: newDate, todos: todosInfo, isToday: false, ShowLimit: { isShowLimitActive: false, limitedTodos: null, }, });
                 }
-            }    
+            }
         }
         setCurrentMonth([...newCurrentMonth]);
 
@@ -186,55 +187,55 @@ function MainCalendar() {
                 dayOfWeek: newDayOfWeek,
             }
             // append from head
-            newAfterMonth.push({ date: newDate, todos: null, isToday: false, ShowLimit: {isShowLimitActive: false, limitedTodos: null,},});
+            newAfterMonth.push({ date: newDate, todos: null, isToday: false, ShowLimit: { isShowLimitActive: false, limitedTodos: null, }, });
         }
         setAfterMonth([...newAfterMonth]);
     }, [todos, currentDate]);
 
     return (
         <>
-        <div id="entireContainer">
+            <div id="entireContainer">
 
-            <div id="entireCalendarContainer">
+                <div id="entireCalendarContainer">
 
-                <div id="calendarMenu">
-                    <div className="calendarMenuChild">
-                        <div id="date">
-                            <b>{yearMonthDisplayer(new Date(currentDate.year, currentDate.month))}</b>
+                    <div id="calendarMenu">
+                        <div className="calendarMenuChild">
+                            <div id="date">
+                                <b>{yearMonthDisplayer(new Date(currentDate.year, currentDate.month))}</b>
+                            </div>
+                        </div>
+                        <div className="calendarMenuChild">
+                            <button className="calendarMenuButton" onClick={handleSetBeforeMonth}><span><b>&lt;</b></span></button>
+                            <b>|</b>
+                            <button className="calendarMenuButton" onClick={handleSetNextMonth}><span><b>&gt;</b></span></button>
                         </div>
                     </div>
-                    <div className="calendarMenuChild">
-                        <button className="calendarMenuButton" onClick={handleSetBeforeMonth}><span><b>&lt;</b></span></button>
-                        <b>|</b>
-                        <button className="calendarMenuButton" onClick={handleSetNextMonth}><span><b>&gt;</b></span></button>
+
+                    <div id="calendarContainer">
+                        <CalendarHeader />
+                        {[...beforeMonth, ...currentMonth, ...afterMonth].map((allMonth) => (
+                            <div className={allMonth.isToday ? "testTrue" : "testFalse"} onClick={() => handleSetTimeTable(allMonth.todos, allMonth.date)}>
+                                {allMonth.date.day}
+                                {allMonth.ShowLimit.isShowLimitActive ? allMonth.ShowLimit.limitedTodos && allMonth.ShowLimit.limitedTodos.map((limitedTodos) => (
+                                    <div className="test">
+                                        {limitedTodos}
+                                    </div>
+                                )) : allMonth.todos && allMonth.todos.map((todos) => (
+                                    <div className="test">
+                                        {todos.title}
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
                     </div>
+
                 </div>
-            
-                <div id="calendarContainer">
-                    <CalendarHeader />
-                    {[...beforeMonth, ...currentMonth, ...afterMonth].map((allMonth) => (
-                        <div className={allMonth.isToday ? "testTrue" : "testFalse"} onClick={() => handleSetTimeTable(allMonth.todos, allMonth.date)}>
-                            {allMonth.date.day}
-                            {allMonth.ShowLimit.isShowLimitActive ? allMonth.ShowLimit.limitedTodos && allMonth.ShowLimit.limitedTodos.map((limitedTodos) => (
-                                <div className="test">
-                                    {limitedTodos}
-                                </div>
-                            )) : allMonth.todos && allMonth.todos.map((todos) => (
-                                <div className="test">
-                                    {todos.title}
-                                </div>
-                            ))}
-                        </div>
-                    ))}
+
+                <div id="entireTimeTableContainer">
+                    <OneDayTimeTable todosValue={timeTableValue} selectedDate={timeTableSelectedDate} />
                 </div>
 
             </div>
-
-            <div id="entireTimeTableContainer">
-                <OneDayTimeTable todosValue={timeTableValue} selectedDate={timeTableSelectedDate} />
-            </div>
-
-        </div>
         </>
     )
 }
@@ -259,7 +260,7 @@ function CalendarHeader() {
 }
 
 function yearMonthDisplayer(date: Date) {
-    const monthList: {[key: number]: string} = {
+    const monthList: { [key: number]: string } = {
         0: "January",
         1: "February",
         2: "March",

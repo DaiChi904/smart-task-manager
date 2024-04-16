@@ -11,7 +11,7 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { calendar, ellipse, listCircle, listOutline, square, triangle } from 'ionicons/icons';
-import Tab1 from './pages/MemoCardList';
+import Tab1 from './pages/TodoApp';
 import Tab2 from './pages/Calendar';
 import Tab3 from './pages/Tab3';
 
