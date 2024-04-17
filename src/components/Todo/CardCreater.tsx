@@ -1,7 +1,7 @@
 // Core part of this App. Create new todos and displying Todo List is main role of this Compornent. Additionaly, the core content of Todos and setTodos, which is this App, is difined in this compornent as a TodosContext.
 
-import { useState, useRef, useEffect } from "react";
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon } from '@ionic/react';
+import { useState, useRef } from "react";
+import { IonContent, IonIcon, IonModal, IonTextarea } from '@ionic/react';
 import { IonDatetime } from "@ionic/react";
 import { IonButtons, IonButton } from "@ionic/react";
 
@@ -9,9 +9,9 @@ import "./TodoCore.css"
 
 import { notificationsOutline } from 'ionicons/icons';
 import { atom, useAtom } from "jotai";
-import { isOtherMordalOpenAtom } from "./TodoApp";
+import { MordalType, modalManagerAtom } from "./TodoApp";
+import { IonTextareaCustomEvent, TextareaInputEventDetail } from "@ionic/core";
 
-export type MordalType = boolean;
 
 export type CardValueType = {
   id: number;
@@ -24,9 +24,9 @@ export type CardValueType = {
 
 export const todosAtom = atom<CardValueType[]>([]);
 
-function TodoApp() {
+export default function CardCreater() {
   // States which are related to show or hide input field by pressing paticular elements.
-  const [isOtherMordalOpen, setIsOtherMordalOpen] = useAtom(isOtherMordalOpenAtom);
+  const [MordalValue, setMordalValue] = useAtom<MordalType>(modalManagerAtom);
   const [todoDateSetFieldShowStatus, setTodoDateSetFieldShowStatus] = useState(false);
 
   // Values related to creating cards.
@@ -36,11 +36,14 @@ function TodoApp() {
   const [todos, setTodos] = useAtom(todosAtom);
 
   // Get input Values of card.
-  const handeleTitleChange = (input: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputTitleValue(input.target.value)
+  // async await はちゃんと勉強しないとヤバそう
+  const handeleTitleChange = async (input: IonTextareaCustomEvent<TextareaInputEventDetail>) => {
+    const textAreaElement = await input.target.getInputElement();
+    setInputTitleValue(textAreaElement.value);
   }
-  const handeleContentChange = (input: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputContentValue(input.target.value)
+  const handeleContentChange = async (input: IonTextareaCustomEvent<TextareaInputEventDetail>) => {
+    const textAreaElement = await input.target.getInputElement();
+    setInputContentValue(textAreaElement.value);
   }
 
   const handleShowDateSetField = () => {
@@ -88,7 +91,7 @@ function TodoApp() {
     // Cancel action if more than one text input field is empty. 
     if (inputTitleValue === "" || inputContentValue === "") {
       // Hide todo input field
-      setIsOtherMordalOpen(false);
+      setMordalValue({isOtherModalOpen: null, isClosedSuccessfully: true});
       // Initialize inputTitleValue and inputContentValue.
       setInputTitleValue("");
       setInputContentValue("");
@@ -106,7 +109,7 @@ function TodoApp() {
       // Create new Todo array.
       setTodos([newTodo, ...todos]);
       // Hide todo input field.
-      setIsOtherMordalOpen(false);
+      setMordalValue({isOtherModalOpen: null, isClosedSuccessfully: true});
       // Initialize inputValues.
       setInputTitleValue("");
       setInputContentValue("");
@@ -117,7 +120,7 @@ function TodoApp() {
   // Cancel adding Todo.
   const handleCancel = () => {
     // Hide todo input field.
-    setIsOtherMordalOpen(false);
+    setMordalValue({isOtherModalOpen: null, isClosedSuccessfully: true});
     // Initialize inputValues.
     setInputTitleValue("");
     setInputContentValue("");
@@ -127,45 +130,41 @@ function TodoApp() {
   console.log(todos);
 
   return(
-        <div className="PendingCardContainer">
-          <IonCard className="PendingCard">
-            <IonIcon id="Notifaction" aria-hidden="true" icon={notificationsOutline} onClick={handleShowDateSetField}></IonIcon>
-            <IonCardHeader>
-              <IonCardTitle>
-                <textarea
-                  placeholder="Type Card Title" 
-                  value={inputTitleValue}
-                  onChange={(input) => handeleTitleChange(input)}
-                  id="TitleInput"
-                />
-              </IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <textarea
-                placeholder="Type Card Details"
-                value={inputContentValue}
-                onChange={(input) => handeleContentChange(input)}
-                id="ContentInput"
-              />
-            </IonCardContent>
-            <div className="CardMenu">
-              <button id="AddBtn" className="CardMenuChild" onClick={handleAdd}><b>Add</b></button>
-              <button id="CancelBtn" className="CardMenuChild" onClick={handleCancel}><b>Cancel</b></button>
-            </div>
-          </IonCard>
-          <div className={todoDateSetFieldShowStatus ? "show" : "hidden"}>
-            <div className="SetTodoDueDateField">
-              <IonDatetime ref={dueDate}>
-                <IonButtons slot="buttons">
-                  <IonButton color="primary" onClick={DateConfirm}>Set</IonButton>
-                  <IonButton color="primary" onClick={DateClear}>clear</IonButton>
-                  <IonButton color="primary" onClick={DateCancel}>Cancel</IonButton>
-                </IonButtons>
-              </IonDatetime>
-            </div>
+    <>
+      <IonModal isOpen={MordalValue.isOtherModalOpen === "createModalOpen"}>
+        <IonContent>
+        <IonIcon id="Notifaction" aria-hidden="true" icon={notificationsOutline} onClick={handleShowDateSetField}></IonIcon>
+        <p>Title</p>
+        <IonTextarea
+          placeholder="Type Card Title" 
+          value={inputTitleValue}
+          onIonInput={(input) => handeleTitleChange(input)}
+        />
+        <p>Content</p>
+        <IonTextarea
+          placeholder="Type Card Details"
+          value={inputContentValue}
+          onIonInput={(input) => handeleContentChange(input)}
+        />
+        <div>
+        <IonButtons>
+          <IonButton onClick={handleAdd} shape="round">Create</IonButton>
+          <IonButton onClick={handleCancel} shape="round">Cancel</IonButton>
+        </IonButtons>
+        </div>
+        <div className={todoDateSetFieldShowStatus ? "show" : "hidden"}>
+          <div className="SetTodoDueDateField">
+            <IonDatetime ref={dueDate}>
+              <IonButtons slot="buttons">
+                <IonButton color="primary" onClick={DateConfirm}>Set</IonButton>
+                <IonButton color="primary" onClick={DateClear}>clear</IonButton>
+                <IonButton color="primary" onClick={DateCancel}>Cancel</IonButton>
+              </IonButtons>
+            </IonDatetime>
           </div>
         </div>
+        </IonContent>
+      </IonModal>
+    </>
   );
 }
-
-export default TodoApp;

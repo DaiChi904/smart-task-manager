@@ -1,20 +1,21 @@
 // Management and Editing for Todos.
 
 import { useState, useRef } from "react";
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonIcon, IonModal, IonTextarea } from '@ionic/react';
 import { IonDatetime, IonDatetimeButton } from '@ionic/react';
 import { IonButton, IonButtons } from '@ionic/react'
 import { notificationsOutline } from "ionicons/icons";
+import { IonTextareaCustomEvent, TextareaInputEventDetail } from "@ionic/core";
 
 import { useAtom } from "jotai";
 
 import { CardValueType } from "./CardCreater";
-import { todosAtom, MordalType } from "./CardCreater";
-import { isOtherMordalOpenAtom } from "./TodoApp";
+import { todosAtom } from "./CardCreater";
+import { MordalType, modalManagerAtom } from "./TodoApp";
 
-function CardManager() {
+export default function CardManager() {
   // States which are related to show or hide input field by pressing paticular elements.
-  const [isOtherMordalOpen, setIsOtherMordalOpen] = useAtom<MordalType>(isOtherMordalOpenAtom);
+  const [MordalValue, setMordalValue] = useAtom<MordalType>(modalManagerAtom);
   const [todoDateSetFieldShowStatus, setTodoDateSetFieldShowStatus] = useState(false);
 
   const [todos, setTodos] = useAtom(todosAtom);
@@ -25,11 +26,14 @@ function CardManager() {
   const [editTodoDueDate, setEditTodoDueDate] = useState<null | string | string[] | undefined>(null);
 
   // Get edited Values of card.
-  const handeleTitleChange = (edit: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditTitleValue(edit.target.value)
+  // async await はちゃんと勉強しないとヤバそう
+  const handeleTitleChange = async (edit: IonTextareaCustomEvent<TextareaInputEventDetail>) => {
+    const textAreaElement = await edit.target.getInputElement();
+    setEditTitleValue(textAreaElement.value);
   }
-  const handeleContentChange = (edit: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setEditContentValue(edit.target.value)
+  const handeleContentChange = async (edit: IonTextareaCustomEvent<TextareaInputEventDetail>) => {
+    const textAreaElement = await edit.target.getInputElement();
+    setEditContentValue(textAreaElement.value);
   }
 
   const handleShowDateSetField = () => {
@@ -79,14 +83,20 @@ function CardManager() {
 
   // !Important: The type of dueDate should be fixed.
   const handleEdit = (id: number, cardTitle: string, cardContent: string, startDate: null | string | string[] | undefined, dueDate: null | string | string[] | undefined) => {
-    if (isOtherMordalOpen === false) {
-      setIsOtherMordalOpen(true);
+    if (MordalValue.isOtherModalOpen === null && MordalValue.isClosedSuccessfully === true) {
+      setMordalValue({isOtherModalOpen: "editModalOpen", isClosedSuccessfully: false});
+      setEditTitleValue(cardTitle);
+      setEditContentValue(cardContent);
+      setEditTodoDueDate(dueDate);
+      setEditingCardID(id);
+    } else if (MordalValue.isClosedSuccessfully === false) {
+      setMordalValue({isOtherModalOpen: "editModalOpen", isClosedSuccessfully: false});
       setEditTitleValue(cardTitle);
       setEditContentValue(cardContent);
       setEditTodoDueDate(dueDate);
       setEditingCardID(id);
     } else {
-      alert("Other input mordal is opening")
+      console.log("Other modal is opening now")
     }
   }
 
@@ -113,7 +123,7 @@ function CardManager() {
 
     // きれいにできそう
     // Hide todo input field.
-    setIsOtherMordalOpen(false);
+    setMordalValue({isOtherModalOpen: null, isClosedSuccessfully: false});
     // Initialize editValues.
     setEditTitleValue("");
     setEditContentValue("");
@@ -123,7 +133,7 @@ function CardManager() {
 
   const handleCancelEdit = () => {
     // Hide todo input field.
-    setIsOtherMordalOpen(false);
+    setMordalValue({isOtherModalOpen: null, isClosedSuccessfully: false});
     // Initialize editValues.
     setEditTitleValue("");
     setEditContentValue("");
@@ -143,16 +153,17 @@ function CardManager() {
     setTodos([...pendingTodos]);
     
     // Hide todo input field.
-    setIsOtherMordalOpen(false);
+    setMordalValue({isOtherModalOpen: null, isClosedSuccessfully: false});
     // Initialize editValues.
     setEditTitleValue("");
     setEditContentValue("");
     setEditTodoDueDate(null);
     setEditingCardID(NaN);
   }
-  
+
   return(
-    <div className="Container">
+    <>
+
       <div className="CardList">
         {todos.map((todos) => (
           <IonCard className="Card" onClick={() => handleEdit(todos.id, todos.cardTitle, todos.cardContent, todos.startDate, todos.dueDate)}>
@@ -168,49 +179,42 @@ function CardManager() {
         ))}
       </div>
 
-      {isOtherMordalOpen ? 
-        <div className="PendingCardContainer">
-          <IonCard className="PendingCard">
-            <IonCardHeader>
-              <IonIcon id="Notifaction" aria-hidden="true" icon={notificationsOutline} onClick={handleShowDateSetField}></IonIcon>
-              <IonCardTitle>
-                <textarea
-                  placeholder="Type Card Title" 
-                  value={editTitleValue}
-                  onChange={(edit) => handeleTitleChange(edit)}
-                  id="TitleEdit"
-                />
-              </IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <textarea
-                placeholder="Type Card Details"
-                value={editContentValue}
-                onChange={(edit) => handeleContentChange(edit)}
-                id="ContentEdit"
-              />
-            </IonCardContent>
-            <div className="CardMenu">
-              <button id="ConfirmEditBtn" className="CardMenuChild" onClick={handleConfirmEdit}><b>Confirm</b></button>
-              <button id="DeleteBtn" className="CardMenuChild" onClick={handleDelete}><b>Delete</b></button>
-              <button id="CancelEditBtn" className="CardMenuChild" onClick={handleCancelEdit}><b>Cancel</b></button>
-            </div>
-          </IonCard>
-          <div className={todoDateSetFieldShowStatus ? "show" : "hidden"}>
-            <div className="SetTodoDueDateField">
-              <IonDatetime ref={editDueDate}>
+      <IonModal isOpen={MordalValue.isOtherModalOpen === "editModalOpen"}>
+        <IonContent>
+        <IonIcon id="Notifaction" aria-hidden="true" icon={notificationsOutline} onClick={handleShowDateSetField}></IonIcon>
+        <p>Title</p>
+        <IonTextarea
+          placeholder="Type Card Title" 
+          value={editTitleValue}
+          onIonInput={(edit) => handeleTitleChange(edit)}
+        />
+        <p>Content</p>
+        <IonTextarea
+          placeholder="Type Card Details"
+          value={editContentValue}
+          onIonInput={(edit) => handeleContentChange(edit)}
+        />
+        <div>
+        <IonButtons>
+          <IonButton onClick={handleConfirmEdit} shape="round"><b>Confirm</b></IonButton>
+          <IonButton onClick={handleDelete} shape="round"><b>Delete</b></IonButton>
+          <IonButton onClick={handleCancelEdit} shape="round"><b>Cancel</b></IonButton>
+        </IonButtons>
+        </div>
+        <div className={todoDateSetFieldShowStatus ? "show" : "hidden"}>
+          <div className="SetTodoDueDateField">
+            <IonDatetime ref={editDueDate}>
                 <IonButtons slot="buttons">
                   <IonButton color="primary" onClick={EditDateConfirm}>Set</IonButton>
                   <IonButton color="primary" onClick={EditDateClear}>clear</IonButton>
                   <IonButton color="primary" onClick={EditDateCancel}>Cancel</IonButton>
                 </IonButtons>
               </IonDatetime>
-            </div>
           </div>
-        </div> : <></>}
+        </div>
+        </IonContent>
+      </IonModal>
 
-    </div>
+    </>
   );
 }
-
-export default CardManager;

@@ -5,39 +5,48 @@ import { IonFab, IonFabButton, IonIcon } from '@ionic/react';
 
 import "./TodoCore.css"
 
-import { add, notificationsOutline } from 'ionicons/icons';
+import { add } from 'ionicons/icons';
 import { atom, useAtom } from "jotai";
-import CardManager from "./CardManager";
-import CardCreater from "./CardCreater";
 
-export type MordalType = boolean;
+import CardCreater from './CardCreater';
+import CardManager from './CardManager';
+
+
+export type MordalType = {
+  isOtherModalOpen: string | null,
+  isClosedSuccessfully: boolean,
+}
 
 // Value to juage other mordal is opening or not.
-export const isOtherMordalOpenAtom = atom<MordalType>(false);
+export const modalManagerAtom = atom<MordalType>({ isOtherModalOpen: null, isClosedSuccessfully: true });
 
 function TodoApp() {
-  const [isOtherMordalOpen, setIsOtherMordalOpen] = useAtom<MordalType>(isOtherMordalOpenAtom);
+  const [MordalValue, setMordalValue] = useAtom<MordalType>(modalManagerAtom);
 
-  const handleCreateMordalOpen = () => {
-    setIsOtherMordalOpen(true);
+  const handleCreateModalOpen = () => {
+    if (MordalValue.isOtherModalOpen === null && MordalValue.isClosedSuccessfully === true) {
+      setMordalValue({ isOtherModalOpen: "createModalOpen", isClosedSuccessfully: false });
+    } else if (MordalValue.isClosedSuccessfully === false) {
+      setMordalValue({ isOtherModalOpen: "createModalOpen", isClosedSuccessfully: false });
+    } else {
+      console.log("Other modal is already opening now.")
+    }
   }
-  return(
-      <IonContent fullscreen>
 
-        <CardManager />
+  return (
+    <IonContent fullscreen>
 
-        {isOtherMordalOpen ? 
-          <CardCreater />
-        : <></>
-        }
+      <CardManager />
 
-        <IonFab slot="fixed" vertical="bottom" horizontal="end">
-          <IonFabButton>
-            <IonIcon icon={add} onClick={handleCreateMordalOpen}></IonIcon>
-          </IonFabButton>
-        </IonFab>
+      <CardCreater />
 
-      </IonContent>
+      <IonFab slot="fixed" vertical="bottom" horizontal="end">
+        <IonFabButton>
+          <IonIcon icon={add} onClick={handleCreateModalOpen}></IonIcon>
+        </IonFabButton>
+      </IonFab>
+
+    </IonContent>
   );
 }
 
