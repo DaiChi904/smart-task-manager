@@ -5,7 +5,7 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, 
 import { IonDatetime } from "@ionic/react";
 import { IonButtons, IonButton } from "@ionic/react";
 
-import "./TodoApp.css"
+import "./TodoCore.css"
 
 import { notificationsOutline } from 'ionicons/icons';
 import { atom, useAtom } from "jotai";
