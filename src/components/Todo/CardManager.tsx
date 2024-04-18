@@ -103,21 +103,11 @@ export default function CardManager() {
 
   // !Important: The type of dueDate should be fixed.
   const handleEdit = (id: number, cardTitle: string, cardContent: string, startDate: null | string | string[] | undefined, dueDate: null | string | string[] | undefined) => {
-    if (modalValue.isOtherModalOpen === null && modalValue.isClosedSuccessfully === true) {
-      setModalValue({isOtherModalOpen: "editModalOpen", isClosedSuccessfully: false});
+      setModalValue("editModalIsOpen");
       setEditTitleValue(cardTitle);
       setEditContentValue(cardContent);
       setEditTodoDueDate(dueDate);
       setEditingCardID(id);
-    } else if (modalValue.isClosedSuccessfully === false) {
-      setModalValue({isOtherModalOpen: "editModalOpen", isClosedSuccessfully: false});
-      setEditTitleValue(cardTitle);
-      setEditContentValue(cardContent);
-      setEditTodoDueDate(dueDate);
-      setEditingCardID(id);
-    } else {
-      console.log("Other modal is opening now")
-    }
   }
 
   const handleConfirmEdit = () => {
@@ -143,7 +133,7 @@ export default function CardManager() {
 
     // きれいにできそう
     // Hide todo input field.
-    setModalValue({isOtherModalOpen: null, isClosedSuccessfully: false});
+    setModalValue(null);
     // Initialize editValues.
     setEditTitleValue("");
     setEditContentValue("");
@@ -153,7 +143,7 @@ export default function CardManager() {
 
   const handleCancelEdit = () => {
     // Hide todo input field.
-    setModalValue({isOtherModalOpen: null, isClosedSuccessfully: false});
+    setModalValue(null);
     // Initialize editValues.
     setEditTitleValue("");
     setEditContentValue("");
@@ -173,7 +163,7 @@ export default function CardManager() {
     setTodos([...pendingTodos]);
     
     // Hide todo input field.
-    setModalValue({isOtherModalOpen: null, isClosedSuccessfully: false});
+    setModalValue(null);
     // Initialize editValues.
     setEditTitleValue("");
     setEditContentValue("");
@@ -199,7 +189,7 @@ export default function CardManager() {
         ))}
       </div>
 
-      <IonModal isOpen={modalValue.isOtherModalOpen === "editModalOpen"}>
+      <IonModal className="Modal" isOpen={modalValue === "editModalIsOpen"} onDidDismiss={() => setModalValue(null)}>
         <IonHeader>
           Editing New Todo
           <IonButtons>
@@ -229,7 +219,7 @@ export default function CardManager() {
           </IonButtons>
         </IonFooter>
 
-        <IonModal isOpen={isSetDateModalOpen.startDate}>
+        <IonModal isOpen={isSetDateModalOpen.startDate} onDidDismiss={() => setIsSetDateModalOpen({startDate: false, dueDate: false,})}>
           <p>Set start Date</p>
           <IonDatetime ref={editStartDate}>
             <IonButtons slot="buttons">
@@ -239,7 +229,7 @@ export default function CardManager() {
             </IonButtons>
           </IonDatetime>
         </IonModal>
-        <IonModal isOpen={isSetDateModalOpen.dueDate}>
+        <IonModal isOpen={isSetDateModalOpen.dueDate} onDidDismiss={() => setIsSetDateModalOpen({startDate: false, dueDate: false,})}>
           <p>Set due date</p>
           <IonDatetime ref={editDueDate}>
             <IonButtons slot="buttons">

@@ -120,7 +120,7 @@ export default function CardCreater() {
     // Cancel action if more than one text input field is empty. 
     if (inputTitleValue === "" || inputContentValue === "") {
       // Hide todo input field
-      setMordalValue({isOtherModalOpen: null, isClosedSuccessfully: true});
+      setMordalValue(null);
       // Initialize inputTitleValue and inputContentValue.
       setInputTitleValue("");
       setInputContentValue("");
@@ -138,7 +138,7 @@ export default function CardCreater() {
       // Create new Todo array.
       setTodos([newTodo, ...todos]);
       // Hide todo input field.
-      setMordalValue({isOtherModalOpen: null, isClosedSuccessfully: true});
+      setMordalValue(null);
       // Initialize inputValues.
       setInputTitleValue("");
       setInputContentValue("");
@@ -149,7 +149,7 @@ export default function CardCreater() {
   // Cancel adding Todo.
   const handleCancel = () => {
     // Hide todo input field.
-    setMordalValue({isOtherModalOpen: null, isClosedSuccessfully: true});
+    setMordalValue(null);
     // Initialize inputValues.
     setInputTitleValue("");
     setInputContentValue("");
@@ -158,10 +158,10 @@ export default function CardCreater() {
   
   console.log(todos);
   console.log(todoStartDate, todoDueDate)
-
+  
   return(
     <>
-      <IonModal isOpen={MordalValue.isOtherModalOpen === "createModalOpen"}>
+      <IonModal className="Modal" isOpen={MordalValue === "createModalIsOpen"} onDidDismiss={() => setMordalValue(null)}>
         <IonHeader>
           Creating New Todo
           <IonButtons>
@@ -193,7 +193,7 @@ export default function CardCreater() {
           </IonButtons>
         </IonFooter>
 
-        <IonModal isOpen={isSetDateModalOpen.startDate}>
+        <IonModal isOpen={isSetDateModalOpen.startDate} onDidDismiss={() => setIsSetDateModalOpen({startDate: false, dueDate: false,})}>
           <p>Set start Date</p>
           <IonDatetime ref={startDate}>
             <IonButtons slot="buttons">
@@ -203,7 +203,7 @@ export default function CardCreater() {
             </IonButtons>
           </IonDatetime>
         </IonModal>
-        <IonModal isOpen={isSetDateModalOpen.dueDate}>
+        <IonModal isOpen={isSetDateModalOpen.dueDate} onDidDismiss={() => setIsSetDateModalOpen({startDate: false, dueDate: false,})}>
           <p>Set due date</p>
           <IonDatetime ref={dueDate}>
             <IonButtons slot="buttons">
