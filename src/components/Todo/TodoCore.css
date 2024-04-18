@@ -129,7 +129,3 @@
     opacity: 0;
     z-index: -334;
 }
-
-.Modal {
-    z-index: 334;
-}

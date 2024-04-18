@@ -161,7 +161,7 @@ export default function CardCreater() {
   
   return(
     <>
-      <IonModal className="Modal" isOpen={MordalValue === "createModalIsOpen"} onDidDismiss={() => setMordalValue(null)}>
+      <IonModal isOpen={MordalValue === "createModalIsOpen"} onDidDismiss={() => setMordalValue(null)}>
         <IonHeader>
           Creating New Todo
           <IonButtons>

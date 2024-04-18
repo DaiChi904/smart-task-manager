@@ -189,7 +189,7 @@ export default function CardManager() {
         ))}
       </div>
 
-      <IonModal className="Modal" isOpen={modalValue === "editModalIsOpen"} onDidDismiss={() => setModalValue(null)}>
+      <IonModal isOpen={modalValue === "editModalIsOpen"} onDidDismiss={() => setModalValue(null)}>
         <IonHeader>
           Editing New Todo
           <IonButtons>
