@@ -9,7 +9,7 @@ import "./TodoCore.css"
 
 import { notificationsOutline } from 'ionicons/icons';
 import { atom, useAtom } from "jotai";
-import { MordalType, modalManagerAtom } from "./TodoApp";
+import { ModalType, modalManagerAtom } from "./TodoApp";
 import { IonTextareaCustomEvent, TextareaInputEventDetail } from "@ionic/core";
 
 export type SetDateType = {
@@ -30,7 +30,7 @@ export const todosAtom = atom<CardValueType[]>([]);
 
 export default function CardCreater() {
   // States which are related to show or hide input field by pressing paticular elements.
-  const [MordalValue, setMordalValue] = useAtom<MordalType>(modalManagerAtom);
+  const [MordalValue, setMordalValue] = useAtom<ModalType>(modalManagerAtom);
   const [isSetDateModalOpen, setIsSetDateModalOpen] = useState<SetDateType>({startDate: false, dueDate: false});
 
   // Values related to creating cards.

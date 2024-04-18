@@ -12,16 +12,16 @@ import CardCreater from './CardCreater';
 import CardManager from './CardManager';
 
 
-export type MordalType = {
+export type ModalType = {
   isOtherModalOpen: string | null,
   isClosedSuccessfully: boolean,
 }
 
 // Value to juage other mordal is opening or not.
-export const modalManagerAtom = atom<MordalType>({ isOtherModalOpen: null, isClosedSuccessfully: true });
+export const modalManagerAtom = atom<ModalType>({ isOtherModalOpen: null, isClosedSuccessfully: true });
 
 function TodoApp() {
-  const [MordalValue, setMordalValue] = useAtom<MordalType>(modalManagerAtom);
+  const [MordalValue, setMordalValue] = useAtom<ModalType>(modalManagerAtom);
 
   const handleCreateModalOpen = () => {
     if (MordalValue.isOtherModalOpen === null && MordalValue.isClosedSuccessfully === true) {

@@ -11,11 +11,11 @@ import { useAtom } from "jotai";
 
 import { CardValueType, SetDateType } from "./CardCreater";
 import { todosAtom } from "./CardCreater";
-import { MordalType, modalManagerAtom } from "./TodoApp";
+import { ModalType, modalManagerAtom } from "./TodoApp";
 
 export default function CardManager() {
   // States which are related to show or hide input field by pressing paticular elements.
-  const [MordalValue, setMordalValue] = useAtom<MordalType>(modalManagerAtom);
+  const [modalValue, setModalValue] = useAtom<ModalType>(modalManagerAtom);
   const [isSetDateModalOpen, setIsSetDateModalOpen] = useState<SetDateType>({startDate: false, dueDate: false});
 
   const [todos, setTodos] = useAtom(todosAtom);
@@ -103,14 +103,14 @@ export default function CardManager() {
 
   // !Important: The type of dueDate should be fixed.
   const handleEdit = (id: number, cardTitle: string, cardContent: string, startDate: null | string | string[] | undefined, dueDate: null | string | string[] | undefined) => {
-    if (MordalValue.isOtherModalOpen === null && MordalValue.isClosedSuccessfully === true) {
-      setMordalValue({isOtherModalOpen: "editModalOpen", isClosedSuccessfully: false});
+    if (modalValue.isOtherModalOpen === null && modalValue.isClosedSuccessfully === true) {
+      setModalValue({isOtherModalOpen: "editModalOpen", isClosedSuccessfully: false});
       setEditTitleValue(cardTitle);
       setEditContentValue(cardContent);
       setEditTodoDueDate(dueDate);
       setEditingCardID(id);
-    } else if (MordalValue.isClosedSuccessfully === false) {
-      setMordalValue({isOtherModalOpen: "editModalOpen", isClosedSuccessfully: false});
+    } else if (modalValue.isClosedSuccessfully === false) {
+      setModalValue({isOtherModalOpen: "editModalOpen", isClosedSuccessfully: false});
       setEditTitleValue(cardTitle);
       setEditContentValue(cardContent);
       setEditTodoDueDate(dueDate);
@@ -143,7 +143,7 @@ export default function CardManager() {
 
     // きれいにできそう
     // Hide todo input field.
-    setMordalValue({isOtherModalOpen: null, isClosedSuccessfully: false});
+    setModalValue({isOtherModalOpen: null, isClosedSuccessfully: false});
     // Initialize editValues.
     setEditTitleValue("");
     setEditContentValue("");
@@ -153,7 +153,7 @@ export default function CardManager() {
 
   const handleCancelEdit = () => {
     // Hide todo input field.
-    setMordalValue({isOtherModalOpen: null, isClosedSuccessfully: false});
+    setModalValue({isOtherModalOpen: null, isClosedSuccessfully: false});
     // Initialize editValues.
     setEditTitleValue("");
     setEditContentValue("");
@@ -173,7 +173,7 @@ export default function CardManager() {
     setTodos([...pendingTodos]);
     
     // Hide todo input field.
-    setMordalValue({isOtherModalOpen: null, isClosedSuccessfully: false});
+    setModalValue({isOtherModalOpen: null, isClosedSuccessfully: false});
     // Initialize editValues.
     setEditTitleValue("");
     setEditContentValue("");
@@ -199,7 +199,7 @@ export default function CardManager() {
         ))}
       </div>
 
-      <IonModal isOpen={MordalValue.isOtherModalOpen === "editModalOpen"}>
+      <IonModal isOpen={modalValue.isOtherModalOpen === "editModalOpen"}>
         <IonHeader>
           Editing New Todo
           <IonButtons>
