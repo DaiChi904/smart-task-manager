@@ -20,7 +20,7 @@ type CalendarType = {
     todos: null | {
         title: string,
         content: string,
-        startDate: string | undefined,
+        startDate: string[],
         dueDate: string[],
     }[],
     isToday: boolean,
@@ -38,7 +38,7 @@ type YearMonthType = {
 export type TodosInfoType = {
     title: string,
     content: string,
-    startDate: string | undefined,
+    startDate: string[],
     dueDate: string[],
 }
 
@@ -117,27 +117,30 @@ function MainCalendar() {
             const todosInfo: TodosInfoType[] = [];
             // Search todos.dueDate match to Day or not, one by one.
             todos.forEach((todos) => {
-                const todosDate = todos.dueDate;
-                if (typeof todosDate !== "string") return;
+                const todosDueDate = todos.dueDate;
+                const todosStartDate = todos.startDate;
                 // Splited Order is year[0], month[1], day[2], hour[3], minute[4].
-                const splitedTodosDate = todosDate.split("-");
+                if (typeof todosDueDate !== "string") return;
+                const splitedTodosDueDate = todosDueDate.split("-");
+                if (typeof todosStartDate !== "string") return;
+                const splitedTodosStartDate = todosStartDate.split("-");
 
                 const newTodosInfo: TodosInfoType = {
                     title: todos.cardTitle,
                     content: todos.cardContent,
-                    startDate: undefined,
-                    dueDate: splitedTodosDate,
+                    startDate: splitedTodosStartDate,
+                    dueDate: splitedTodosDueDate,
                 }
 
                 // Push title to todosInfo if todosDate and I, which is the day, is match.
-                if (i < 10 && (`${currentDate.year}` == splitedTodosDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDate[1])) {
+                if (i < 10 && (`${currentDate.year}` == splitedTodosDueDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDueDate[1])) {
                     const I = `0${i}`;
-                    if (I === splitedTodosDate[2]) {
+                    if (I === splitedTodosDueDate[2]) {
                         todosInfo.push(newTodosInfo);
                     }
-                } else if ((`${currentDate.year}` == splitedTodosDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDate[1])) {
+                } else if ((`${currentDate.year}` == splitedTodosDueDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDueDate[1])) {
                     const I = `${i}`;
-                    if (I === splitedTodosDate[2]) {
+                    if (I === splitedTodosDueDate[2]) {
                         todosInfo.push(newTodosInfo);
                     }
                 }
@@ -150,7 +153,7 @@ function MainCalendar() {
                     if (index >= todosInfo.length) return;
                     if (index >= 3) {
                         limitedTodosArray.pop();
-                        limitedTodosArray.push(`${todosInfo.length - 2} todos remaining`);
+                        limitedTodosArray.push(`${todosInfo.length - 2} infos remaining`);
                     } else {
                         limitedTodosArray.push(todos.title);
                     }
