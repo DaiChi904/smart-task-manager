@@ -49,7 +49,7 @@ export function getDayOfWeek(date: Date) {
  * 
  * Month: 0 ~ 11
  */
-export function getBeforeMonth(current: Date) {
+export function getLastMonth(current: Date) {
     if (current.getMonth() === 0) {
         const changedYearNum: number = current.getFullYear() - 1;
         const changedMonthNum: number = 11;

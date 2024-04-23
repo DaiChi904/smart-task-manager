@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 
 import { todosAtom } from '../Todo/CardCreater';
 
-import { getLastDay, getBeforeMonth, getNextMonth, getDayOfWeek } from '../../utils/date';
+import { getLastDay, getLastMonth, getNextMonth, getDayOfWeek } from '../../utils/date';
 
 import "./MainCalendar.css";
 import OneDayTimeTable from './OneDayTimeTable';
@@ -58,7 +58,7 @@ function MainCalendar() {
     const [currentDate, setCurrentDate] = useState<YearMonthType>({ year: dateOfToday.getFullYear(), month: dateOfToday.getMonth() });
 
     const handleSetBeforeMonth = () => {
-        const beforeDate = getBeforeMonth(new Date(currentDate.year, currentDate.month));
+        const beforeDate = getLastMonth(new Date(currentDate.year, currentDate.month));
         setCurrentDate({ year: beforeDate.getFullYear(), month: beforeDate.getMonth() });
     }
     const handleSetNextMonth = () => {

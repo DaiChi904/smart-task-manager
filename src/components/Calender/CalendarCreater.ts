@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { todosAtom } from "../Todo/CardCreater";
-import { getBeforeMonth, getLastDay, getDayOfWeek, getNextMonth } from "../../utils/date";
+import { getLastMonth, getLastDay, getDayOfWeek, getNextMonth } from "../../utils/date";
 import { DateType, TodosInfoType, YearMonthType } from "./CoreCalendar";
 
 type CalendarType = {
@@ -24,7 +24,7 @@ type CalendarType = {
     },
 }
 
-type AllCalendarType = {
+export type AllCalendarType = {
     lastMonth: CalendarType[],
     currentMonth: CalendarType[],
     nextMonth: CalendarType[],
@@ -54,7 +54,7 @@ export default function CalendarCreater(currentDate: YearMonthType) {
         const newNextMonth: CalendarType[] = [];
 
         // Array of day of manth before currentMonth
-        const beforeDate = getBeforeMonth(new Date(currentDate.year, currentDate.month));
+        const beforeDate = getLastMonth(new Date(currentDate.year, currentDate.month));
         for (let bi: number = getLastDay(beforeDate.getMonth()); bi > getLastDay(beforeDate.getMonth()) - getDayOfWeek(new Date(currentDate.year, currentDate.month, 1)); bi--) {
             const newDayOfWeek = getDayOfWeek(new Date());
             const newDate: DateType = {
