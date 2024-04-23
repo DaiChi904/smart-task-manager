@@ -7,7 +7,6 @@ import { IonButtons, IonButton } from "@ionic/react";
 
 import "./TodoCore.css"
 
-import { notificationsOutline } from 'ionicons/icons';
 import { atom, useAtom } from "jotai";
 import { ModalType, modalManagerAtom } from "./TodoApp";
 import { IonTextareaCustomEvent, TextareaInputEventDetail } from "@ionic/core";

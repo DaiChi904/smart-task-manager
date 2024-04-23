@@ -14,6 +14,9 @@ export type TodosInfoType = {
     content: string,
     startDate: string[],
     dueDate: string[],
+    cheacked: boolean,
+    isInProgress: boolean,
+    isExpired: boolean,
 }
 
 export type DateType = {
@@ -48,9 +51,9 @@ function CoreCalendar({selectedDate}: {selectedDate: YearMonthType}) {
             <div id="calendarContainer">
                 <CalendarHeader />
                 {allMonth && [...allMonth.lastMonth, ...allMonth.currentMonth, ...allMonth.nextMonth].map((allMonth) => (
-                <div className={allMonth.isToday ? "testTrue" : "testFalse"} onClick={() => handleSetTimeTable(allMonth.todos, allMonth.date)}>
+                <div className={allMonth.status.isToday ? "testTrue" : "testFalse"} onClick={() => handleSetTimeTable(allMonth.todos, allMonth.date)}>
                     {allMonth.date.day}
-                    {allMonth.ShowLimit.isShowLimitActive ? allMonth.ShowLimit.limitedTodos && allMonth.ShowLimit.limitedTodos.map((limitedTodos) => (
+                    {allMonth.status.isShowLimitActive ? allMonth.limitedTodos && allMonth.limitedTodos.map((limitedTodos) => (
                         <div className="test">
                             {limitedTodos}
                         </div>

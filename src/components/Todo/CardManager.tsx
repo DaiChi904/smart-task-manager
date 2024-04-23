@@ -86,18 +86,18 @@ export default function CardManager() {
       setEditTodoDueDate(null);
       setIsSetDateModalOpen({startDate: false, dueDate: false,});
     } else {
-      alert("Unexpected error has ocuured")
+      alert("Unexpected error has ocuured");
     }
   }
   const EditDateCancel = () => {
     if (isSetDateModalOpen.startDate === true) {
-      editStartDate.current?.cancel();;
+      editStartDate.current?.cancel();
       setIsSetDateModalOpen({startDate: false, dueDate: false,});
     } else if (isSetDateModalOpen.dueDate === true) {
       editDueDate.current?.cancel();
       setIsSetDateModalOpen({startDate: false, dueDate: false,});
     } else {
-      alert("Unexpected error has ocuured")
+      alert("Unexpected error has ocuured");
     }
   }
 
@@ -106,6 +106,7 @@ export default function CardManager() {
       setModalValue("editModalIsOpen");
       setEditTitleValue(cardTitle);
       setEditContentValue(cardContent);
+      setEditTodoStartDate(startDate);
       setEditTodoDueDate(dueDate);
       setEditingCardID(id);
   }

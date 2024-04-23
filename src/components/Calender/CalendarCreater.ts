@@ -16,12 +16,15 @@ type CalendarType = {
         content: string,
         startDate: string[],
         dueDate: string[],
+        cheacked: boolean,
+        isInProgress: boolean,
+        isExpired: boolean,
     }[],
-    isToday: boolean,
-    ShowLimit: {
+    status: {
+        isToday: boolean,
         isShowLimitActive: boolean,
-        limitedTodos: string[] | null,
-    },
+    }
+    limitedTodos: string[] | null,
 }
 
 export type AllCalendarType = {
@@ -64,7 +67,7 @@ export default function CalendarCreater(currentDate: YearMonthType) {
                 dayOfWeek: newDayOfWeek,
             }
             // append from tail
-            newLastMonth.unshift({ date: newDate, todos: null, isToday: false, ShowLimit: { isShowLimitActive: false, limitedTodos: null, }, });
+            newLastMonth.unshift({ date: newDate, todos: null, status: {isToday: false, isShowLimitActive: false}, limitedTodos: null });
         }
         setLastMonth([...newLastMonth]);
 
@@ -83,16 +86,21 @@ export default function CalendarCreater(currentDate: YearMonthType) {
                 const todosDueDate = todos.dueDate;
                 const todosStartDate = todos.startDate;
                 // Splited Order is year[0], month[1], day[2], hour[3], minute[4].
-                if (typeof todosDueDate !== "string") return;
-                const splitedTodosDueDate = todosDueDate.split("-");
                 if (typeof todosStartDate !== "string") return;
                 const splitedTodosStartDate = todosStartDate.split("-");
+                if (typeof todosDueDate !== "string") return;
+                const splitedTodosDueDate = todosDueDate.split("-");
+
+                const checkedValue = statusCheacker(todosStartDate, todosDueDate, todos.checked);
 
                 const newTodosInfo: TodosInfoType = {
                     title: todos.cardTitle,
                     content: todos.cardContent,
                     startDate: splitedTodosStartDate,
                     dueDate: splitedTodosDueDate,
+                    cheacked: todos.checked,
+                    isInProgress: checkedValue.newIsProgress,
+                    isExpired: checkedValue.newIsExpired,
                 }
 
                 // Push title to todosInfo if todosDate and I, which is the day, is match.
@@ -127,16 +135,16 @@ export default function CalendarCreater(currentDate: YearMonthType) {
             if (todosInfo.length > 3) {
                 // Check isToday, then append from head.
                 if (dateOfToday.getDate() == i && (currentDate.year === dateOfToday.getFullYear()) && (currentDate.month === dateOfToday.getMonth())) {
-                    newCurrentMonth.push({ date: newDate, todos: todosInfo, isToday: true, ShowLimit: { isShowLimitActive: true, limitedTodos: limitedTodosArray, }, });
+                    newCurrentMonth.push({ date: newDate, todos: todosInfo, status: {isToday: true, isShowLimitActive: true}, limitedTodos: limitedTodosArray });
                 } else {
-                    newCurrentMonth.push({ date: newDate, todos: todosInfo, isToday: false, ShowLimit: { isShowLimitActive: true, limitedTodos: limitedTodosArray, }, });
+                    newCurrentMonth.push({ date: newDate, todos: todosInfo, status: {isToday: false, isShowLimitActive: true}, limitedTodos: limitedTodosArray });
                 }
             } else {
                 // Check isToday, then append from head.
                 if (dateOfToday.getDate() == i && (currentDate.year === dateOfToday.getFullYear()) && (currentDate.month === dateOfToday.getMonth())) {
-                    newCurrentMonth.push({ date: newDate, todos: todosInfo, isToday: true, ShowLimit: { isShowLimitActive: false, limitedTodos: null, }, });
+                    newCurrentMonth.push({ date: newDate, todos: todosInfo, status: {isToday: true, isShowLimitActive: false}, limitedTodos: null });
                 } else {
-                    newCurrentMonth.push({ date: newDate, todos: todosInfo, isToday: false, ShowLimit: { isShowLimitActive: false, limitedTodos: null, }, });
+                    newCurrentMonth.push({ date: newDate, todos: todosInfo, status: {isToday: false, isShowLimitActive: false}, limitedTodos: null });
                 }
             }
         }
@@ -153,7 +161,7 @@ export default function CalendarCreater(currentDate: YearMonthType) {
                 dayOfWeek: newDayOfWeek,
             }
             // append from head
-            newNextMonth.push({ date: newDate, todos: null, isToday: false, ShowLimit: { isShowLimitActive: false, limitedTodos: null, }, });
+            newNextMonth.push({ date: newDate, todos: null, status: {isToday: false, isShowLimitActive: false}, limitedTodos: null });
         }
         setNextMonth([...newNextMonth]);
 
@@ -161,4 +169,38 @@ export default function CalendarCreater(currentDate: YearMonthType) {
     }, [todos, currentDate]);
 
     return allMonth;
+}
+
+/**
+ * Cheack each todos is in progress or not and is expired or not.
+ * @param todosDueDate 
+ * @param todosStartDate 
+ * @param checked 
+ */
+function statusCheacker(todosStartDate: string, todosDueDate: string, checked: boolean) {
+    const formatedISOStringToday = (new Date().toISOString()).replace(/T|:/g, "-");
+
+    const todayValue = parseFloat(formatedISOStringToday.replace(/-/g, ""));
+    const startDateValue = parseFloat(todosStartDate.replace(/-/g, ""));
+    const dueDateValue = parseFloat(todosDueDate.replace(/-/g, ""));
+
+    if (checked === true) {
+        const newIsProgress = false;
+        const newIsExpired = false;
+        return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
+    } else {
+        if (dueDateValue > todayValue && todayValue > startDateValue) {
+            const newIsProgress = true;
+            const newIsExpired = false;
+            return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
+        } else if (startDateValue > todayValue) {
+            const newIsProgress = false;
+            const newIsExpired = false;
+            return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
+        } else {
+            const newIsProgress = false;
+            const newIsExpired = true;
+            return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
+        }
+    }
 }
