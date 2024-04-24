@@ -16,7 +16,7 @@ export type SetDateType = {
   dueDate: boolean,
 }
 
-export type CardValueType = {
+export type TodosAtomType = {
   id: number;
   cardTitle: string;
   cardContent: string;
@@ -25,7 +25,7 @@ export type CardValueType = {
   dueDate: null | string | string[] | undefined;
 }
 
-export const todosAtom = atom<CardValueType[]>([]);
+export const todosAtom = atom<TodosAtomType[]>([]);
 
 export default function CardCreater() {
   // States which are related to show or hide input field by pressing paticular elements.
@@ -126,7 +126,7 @@ export default function CardCreater() {
       alert("Your action has been canceled due to lack of the title or the content.")
     } else {
       add.preventDefault();
-      const newTodo: CardValueType = {
+      const newTodo: TodosAtomType = {
         id: todos.length,
         cardTitle: inputTitleValue,
         cardContent: inputContentValue,

@@ -36,13 +36,6 @@ type YearMonthType = {
     month: number,
 }
 
-export type TodosInfoType = {
-    title: string,
-    content: string,
-    startDate: string[],
-    dueDate: string[],
-}
-
 export type DateType = {
     year: number,
     month: number,
@@ -57,7 +50,7 @@ function MainCalendar() {
     // Date of year and month which is selected now. InitialValue is date of today.
     const [currentDate, setCurrentDate] = useState<YearMonthType>({ year: dateOfToday.getFullYear(), month: dateOfToday.getMonth() });
 
-    const handleSetBeforeMonth = () => {
+    const handleSetLastMonth = () => {
         const beforeDate = getLastMonth(new Date(currentDate.year, currentDate.month));
         setCurrentDate({ year: beforeDate.getFullYear(), month: beforeDate.getMonth() });
     }
@@ -79,7 +72,7 @@ function MainCalendar() {
                             </div>
                         </div>
                         <div className="calendarMenuChild">
-                            <button className="calendarMenuButton" onClick={handleSetBeforeMonth}><span><b>&lt;</b></span></button>
+                            <button className="calendarMenuButton" onClick={handleSetLastMonth}><span><b>&lt;</b></span></button>
                             <b>|</b>
                             <button className="calendarMenuButton" onClick={handleSetNextMonth}><span><b>&gt;</b></span></button>
                         </div>

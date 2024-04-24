@@ -12,11 +12,12 @@ export type YearMonthType = {
 export type TodosInfoType = {
     title: string,
     content: string,
-    startDate: string[],
-    dueDate: string[],
+    startDate: string[] | null,
+    dueDate: string[] | null,
     cheacked: boolean,
     isInProgress: boolean,
     isExpired: boolean,
+    isStartDate: boolean,
 }
 
 export type DateType = {

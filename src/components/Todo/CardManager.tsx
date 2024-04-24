@@ -9,7 +9,7 @@ import { IonTextareaCustomEvent, TextareaInputEventDetail } from "@ionic/core";
 
 import { useAtom } from "jotai";
 
-import { CardValueType, SetDateType } from "./CardCreater";
+import { TodosAtomType, SetDateType } from "./CardCreater";
 import { todosAtom } from "./CardCreater";
 import { ModalType, modalManagerAtom } from "./TodoApp";
 
@@ -113,7 +113,7 @@ export default function CardManager() {
 
   const handleConfirmEdit = () => {
     // Create new edited card.
-    const newTodo: CardValueType = {
+    const newTodo: TodosAtomType = {
       id: todos.length,
       cardTitle: editTitleValue,
       cardContent: editContentValue,
