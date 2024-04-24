@@ -14,11 +14,12 @@ type CalendarType = {
     todos: null | {
         title: string,
         content: string,
-        startDate: string[],
-        dueDate: string[],
+        startDate: string[] | null,
+        dueDate: string[] | null,
         cheacked: boolean,
         isInProgress: boolean,
         isExpired: boolean,
+        isStartDate: boolean,
     }[],
     status: {
         isToday: boolean,
@@ -86,33 +87,64 @@ export default function CalendarCreater(currentDate: YearMonthType) {
                 const todosDueDate = todos.dueDate;
                 const todosStartDate = todos.startDate;
                 // Splited Order is year[0], month[1], day[2], hour[3], minute[4].
-                if (typeof todosStartDate !== "string") return;
-                const splitedTodosStartDate = todosStartDate.split("-");
-                if (typeof todosDueDate !== "string") return;
-                const splitedTodosDueDate = todosDueDate.split("-");
+                const splitedTodosStartDate = getSplitedDate(todosStartDate);
+                const splitedTodosDueDate = getSplitedDate(todosDueDate);
 
                 const checkedValue = statusCheacker(todosStartDate, todosDueDate, todos.checked);
 
-                const newTodosInfo: TodosInfoType = {
-                    title: todos.cardTitle,
-                    content: todos.cardContent,
-                    startDate: splitedTodosStartDate,
-                    dueDate: splitedTodosDueDate,
-                    cheacked: todos.checked,
-                    isInProgress: checkedValue.newIsProgress,
-                    isExpired: checkedValue.newIsExpired,
-                }
 
                 // Push title to todosInfo if todosDate and I, which is the day, is match.
-                if (i < 10 && (`${currentDate.year}` == splitedTodosDueDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDueDate[1])) {
-                    const I = `0${i}`;
-                    if (I === splitedTodosDueDate[2]) {
-                        todosInfo.push(newTodosInfo);
+                if (splitedTodosDueDate === null) {
+                    return;
+                } else {
+                    const newTodosInfo: TodosInfoType = {
+                        title: todos.cardTitle,
+                        content: todos.cardContent,
+                        startDate: splitedTodosStartDate,
+                        dueDate: splitedTodosDueDate,
+                        cheacked: todos.checked,
+                        isInProgress: checkedValue.newIsProgress,
+                        isExpired: checkedValue.newIsExpired,
+                        isStartDate: false,
                     }
-                } else if ((`${currentDate.year}` == splitedTodosDueDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDueDate[1])) {
-                    const I = `${i}`;
-                    if (I === splitedTodosDueDate[2]) {
-                        todosInfo.push(newTodosInfo);
+
+                    if (i < 10 && (`${currentDate.year}` == splitedTodosDueDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDueDate[1])) {
+                        const I = `0${i}`;
+                        if (I === splitedTodosDueDate[2]) {
+                            todosInfo.push(newTodosInfo);
+                        }
+                    } else if ((`${currentDate.year}` == splitedTodosDueDate[0]) && (`0${currentDate.month + 1}` == splitedTodosDueDate[1])) {
+                        const I = `${i}`;
+                        if (I === splitedTodosDueDate[2]) {
+                            todosInfo.push(newTodosInfo);
+                        }
+                    }
+                }
+
+                if (splitedTodosStartDate === null) {
+                    return;
+                } else {
+                    const newTodosInfo: TodosInfoType = {
+                        title: todos.cardTitle,
+                        content: todos.cardContent,
+                        startDate: splitedTodosStartDate,
+                        dueDate: splitedTodosDueDate,
+                        cheacked: todos.checked,
+                        isInProgress: checkedValue.newIsProgress,
+                        isExpired: checkedValue.newIsExpired,
+                        isStartDate: true,
+                    }
+    
+                    if (i < 10 && (`${currentDate.year}` == splitedTodosStartDate[0]) && (`0${currentDate.month + 1}` == splitedTodosStartDate[1])) {
+                        const I = `0${i}`;
+                        if (I === splitedTodosStartDate[2]) {
+                            todosInfo.push(newTodosInfo);
+                        }
+                    } else if ((`${currentDate.year}` == splitedTodosStartDate[0]) && (`0${currentDate.month + 1}` == splitedTodosStartDate[1])) {
+                        const I = `${i}`;
+                        if (I === splitedTodosStartDate[2]) {
+                            todosInfo.push(newTodosInfo);
+                        }
                     }
                 }
             })
@@ -177,30 +209,75 @@ export default function CalendarCreater(currentDate: YearMonthType) {
  * @param todosStartDate 
  * @param checked 
  */
-function statusCheacker(todosStartDate: string, todosDueDate: string, checked: boolean) {
+function statusCheacker(todosStartDate: string | string[] | null | undefined, todosDueDate: string | string[] | null | undefined, checked: boolean) {
     const formatedISOStringToday = (new Date().toISOString()).replace(/T|:/g, "-");
 
-    const todayValue = parseFloat(formatedISOStringToday.replace(/-/g, ""));
-    const startDateValue = parseFloat(todosStartDate.replace(/-/g, ""));
-    const dueDateValue = parseFloat(todosDueDate.replace(/-/g, ""));
+    const todayValue = getDateValue(formatedISOStringToday);
+    const startDateValue = getDateValue(todosStartDate);
+    const dueDateValue = getDateValue(todosDueDate);
 
-    if (checked === true) {
-        const newIsProgress = false;
-        const newIsExpired = false;
-        return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
-    } else {
-        if (dueDateValue > todayValue && todayValue > startDateValue) {
-            const newIsProgress = true;
-            const newIsExpired = false;
-            return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
-        } else if (startDateValue > todayValue) {
+    if (typeof todosStartDate === "string") {
+        if (checked === true) {
             const newIsProgress = false;
             const newIsExpired = false;
             return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
         } else {
-            const newIsProgress = false;
-            const newIsExpired = true;
-            return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
+            if (dueDateValue > todayValue && todayValue > startDateValue) {
+                const newIsProgress = true;
+                const newIsExpired = false;
+                return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
+            } else if (startDateValue > todayValue) {
+                const newIsProgress = false;
+                const newIsExpired = false;
+                return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
+            } else {
+                const newIsProgress = false;
+                const newIsExpired = true;
+                return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
+            }
         }
+    } else {
+        if (checked === true) {
+            const newIsProgress = false;
+            const newIsExpired = false;
+            return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
+        } else {
+            if (dueDateValue > todayValue) {
+                const newIsProgress = false;
+                const newIsExpired = false;
+                return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
+            } else {
+                const newIsProgress = false;
+                const newIsExpired = true;
+                return {newIsProgress: newIsProgress, newIsExpired: newIsExpired};
+            }
+        }
+    }
+}
+
+/**
+ * Create splited date(string array). If this function receves values which is not string, this returns null.
+ * @param dateString 
+ */
+function getSplitedDate(dateString: string | string[] | null | undefined) {
+    if (typeof dateString === "string") {
+        const splitedDateString = dateString.split("-");
+        return splitedDateString;
+    } else {
+        return null;
+    }
+}
+
+/**
+ * Get marged string value as number. YYYYMMDDHHmm
+ * @param date 
+ */
+function getDateValue(date: string | string[] | null | undefined) {
+    if (typeof date === "string") {
+        const dateValue = parseFloat(date.replace(/-/g, ""));
+        return dateValue;
+    } else {
+        const dateValue = NaN;
+        return dateValue;
     }
 }
