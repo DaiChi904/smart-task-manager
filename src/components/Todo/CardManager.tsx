@@ -9,9 +9,9 @@ import { IonTextareaCustomEvent, TextareaInputEventDetail } from "@ionic/core";
 
 import { useAtom } from "jotai";
 
-import { TodosAtomType, SetDateType } from "./CardCreater";
 import { todosAtom } from "./CardCreater";
-import { ModalType, modalManagerAtom } from "./TodoApp";
+import { modalManagerAtom } from "./TodoApp";
+import { ModalType, SetDateType, TodosAtomType } from "../../types/todoTypes";
 
 export default function CardManager() {
   // States which are related to show or hide input field by pressing paticular elements.

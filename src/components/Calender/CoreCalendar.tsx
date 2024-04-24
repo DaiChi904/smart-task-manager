@@ -3,29 +3,7 @@ import { useState } from 'react';
 import "./MainCalendar.css";
 import OneDayTimeTable from './OneDayTimeTable';
 import CalendarCreater from './CalendarCreater';
-
-export type YearMonthType = {
-    year: number,
-    month: number,
-}
-
-export type TodosInfoType = {
-    title: string,
-    content: string,
-    startDate: string[] | null,
-    dueDate: string[] | null,
-    cheacked: boolean,
-    isInProgress: boolean,
-    isExpired: boolean,
-    isStartDate: boolean,
-}
-
-export type DateType = {
-    year: number,
-    month: number,
-    day: number,
-    dayOfWeek: number,
-}
+import { YearMonthType, TodosInfoType, DateType } from '../../types/calendarTypes';
 
 // Get date of today
 const dateOfToday = new Date();

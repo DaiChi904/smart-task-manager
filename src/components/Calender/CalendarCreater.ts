@@ -2,37 +2,7 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { todosAtom } from "../Todo/CardCreater";
 import { getLastMonth, getLastDay, getDayOfWeek, getNextMonth } from "../../utils/date";
-import { DateType, TodosInfoType, YearMonthType } from "./CoreCalendar";
-
-type CalendarType = {
-    date: {
-        year: number,
-        month: number,
-        day: number,
-        dayOfWeek: number,
-    },
-    todos: null | {
-        title: string,
-        content: string,
-        startDate: string[] | null,
-        dueDate: string[] | null,
-        cheacked: boolean,
-        isInProgress: boolean,
-        isExpired: boolean,
-        isStartDate: boolean,
-    }[],
-    status: {
-        isToday: boolean,
-        isShowLimitActive: boolean,
-    }
-    limitedTodos: string[] | null,
-}
-
-export type AllCalendarType = {
-    lastMonth: CalendarType[],
-    currentMonth: CalendarType[],
-    nextMonth: CalendarType[],
-}
+import { CalendarType, AllCalendarType, DateType, TodosInfoType, YearMonthType } from "../../types/calendarTypes";
 
 // Get date of today
 const dateOfToday = new Date();

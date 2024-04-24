@@ -1,47 +1,10 @@
-import { useEffect, useState } from 'react';
-
-import { useAtom } from 'jotai';
-
-import { todosAtom } from '../Todo/CardCreater';
-
+import { useState } from 'react';
 import { getLastDay, getLastMonth, getNextMonth, getDayOfWeek } from '../../utils/date';
 
 import "./MainCalendar.css";
 import OneDayTimeTable from './OneDayTimeTable';
 import CoreCalendar from './CoreCalendar';
-
-
-type CalendarType = {
-    date: {
-        year: number,
-        month: number,
-        day: number,
-        dayOfWeek: number,
-    },
-    todos: null | {
-        title: string,
-        content: string,
-        startDate: string[],
-        dueDate: string[],
-    }[],
-    isToday: boolean,
-    ShowLimit: {
-        isShowLimitActive: boolean,
-        limitedTodos: string[] | null,
-    }
-}
-
-type YearMonthType = {
-    year: number,
-    month: number,
-}
-
-export type DateType = {
-    year: number,
-    month: number,
-    day: number,
-    dayOfWeek: number,
-}
+import { YearMonthType } from '../../types/calendarTypes';
 
 // Get date of today
 const dateOfToday = new Date();

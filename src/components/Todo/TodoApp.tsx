@@ -10,9 +10,8 @@ import { atom, useAtom } from "jotai";
 
 import CardCreater from './CardCreater';
 import CardManager from './CardManager';
+import { ModalType } from '../../types/todoTypes';
 
-
-export type ModalType = string | null;
 
 // Value to juage other mordal is opening or not.
 export const modalManagerAtom = atom<ModalType>(null);

@@ -8,22 +8,11 @@ import { IonButtons, IonButton } from "@ionic/react";
 import "./TodoCore.css"
 
 import { atom, useAtom } from "jotai";
-import { ModalType, modalManagerAtom } from "./TodoApp";
+import { modalManagerAtom } from "./TodoApp";
 import { IonTextareaCustomEvent, TextareaInputEventDetail } from "@ionic/core";
+import { TodosAtomType, SetDateType, ModalType } from "../../types/todoTypes";
 
-export type SetDateType = {
-  startDate: boolean,
-  dueDate: boolean,
-}
 
-export type TodosAtomType = {
-  id: number;
-  cardTitle: string;
-  cardContent: string;
-  checked: boolean;
-  startDate: null | string | string[] | undefined;
-  dueDate: null | string | string[] | undefined;
-}
 
 export const todosAtom = atom<TodosAtomType[]>([]);
 
