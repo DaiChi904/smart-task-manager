@@ -2,7 +2,7 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { todosAtom } from "../Todo/CardCreater";
 import { getLastMonth, getLastDay, getDayOfWeek, getNextMonth } from "../../utils/date";
-import { CalendarType, AllCalendarType, DateType, TodosInfoType, YearMonthType } from "../../types/calendarTypes";
+import { CalendarType, AllCalendarType, DateType, TodosInfoType, YearMonthType, LimitedTodosType } from "../../types/calendarTypes";
 
 // Get date of today
 const dateOfToday = new Date();
@@ -119,27 +119,25 @@ export default function CalendarCreater(currentDate: YearMonthType) {
                 }
             })
 
-            // Create string[] if todosInfo.lengh is more than 4
-            const limitedTodosArray: string[] = [];
-            if (todosInfo.length > 3) {
-                todosInfo.forEach((todos, index) => {
-                    if (index >= todosInfo.length) return;
-                    if (index >= 3) {
-                        limitedTodosArray.pop();
-                        limitedTodosArray.push(`${todosInfo.length - 2} infos remaining`);
-                    } else {
-                        limitedTodosArray.push(todos.title);
-                    }
-                })
-            }
+
 
             // Cheack isShowLimitActive is true or false.
             if (todosInfo.length > 3) {
+                const limitedTodos: LimitedTodosType[] = [];
+                todosInfo.forEach((todos, index) => {
+                    if (index >= 3) {
+                        limitedTodos.pop();
+                        limitedTodos.push({content: `${todosInfo.length - 2} infos remainig`, isStartDate: false});
+                    } else {
+                        limitedTodos.push({content: todos.title, isStartDate: todos.isStartDate});
+                    }
+                })
+                
                 // Check isToday, then append from head.
                 if (dateOfToday.getDate() == i && (currentDate.year === dateOfToday.getFullYear()) && (currentDate.month === dateOfToday.getMonth())) {
-                    newCurrentMonth.push({ date: newDate, todos: todosInfo, status: {isToday: true, isShowLimitActive: true}, limitedTodos: limitedTodosArray });
+                    newCurrentMonth.push({ date: newDate, todos: todosInfo, status: {isToday: true, isShowLimitActive: true}, limitedTodos: [...limitedTodos] });
                 } else {
-                    newCurrentMonth.push({ date: newDate, todos: todosInfo, status: {isToday: false, isShowLimitActive: true}, limitedTodos: limitedTodosArray });
+                    newCurrentMonth.push({ date: newDate, todos: todosInfo, status: {isToday: false, isShowLimitActive: true}, limitedTodos: [...limitedTodos] });
                 }
             } else {
                 // Check isToday, then append from head.

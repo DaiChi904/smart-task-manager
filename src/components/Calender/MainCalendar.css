@@ -78,6 +78,14 @@
     margin: 0.5px;
 }
 
+.cellElements_isStartDate_true {
+    color: red;
+}
+
+.cellElements_isStartDate_false {
+    color: blue;
+}
+
 /* TimeTable */
 #entireTimeTableContainer {
     display: flex;

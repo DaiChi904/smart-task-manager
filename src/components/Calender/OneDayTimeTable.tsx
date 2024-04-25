@@ -1,4 +1,5 @@
-import { DateType, TodosInfoType } from "./MainCalendar";
+
+import { TodosInfoType, DateType } from "../../types/calendarTypes";
 import "./OneDayTimeTable.css";
 
 function OneDayTimeTable(value: { todosValue: TodosInfoType[]; selectedDate: DateType; }) {
@@ -22,6 +23,7 @@ function OneDayTimeTable(value: { todosValue: TodosInfoType[]; selectedDate: Dat
                 </div>
                 <div id="timeTableContainer">
                     {todosValue && todosValue.map((todos) => (
+                        todos.dueDate && 
                         <div id="innerTableElement">
                             <h1>{todos.title}</h1>
                             <p>{todos.content}</p>

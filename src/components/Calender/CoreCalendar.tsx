@@ -3,7 +3,8 @@ import { useState } from 'react';
 import "./MainCalendar.css";
 import OneDayTimeTable from './OneDayTimeTable';
 import CalendarCreater from './CalendarCreater';
-import { YearMonthType, TodosInfoType, DateType } from '../../types/calendarTypes';
+import { YearMonthType, TodosInfoType, DateType, AllCalendarType } from '../../types/calendarTypes';
+import CalendarCells from './CalendarCells';
 
 // Get date of today
 const dateOfToday = new Date();
@@ -22,31 +23,14 @@ function CoreCalendar({selectedDate}: {selectedDate: YearMonthType}) {
         }
     }
 
-    const allMonth = CalendarCreater(selectedDate);
+    const allMonth: AllCalendarType | undefined = CalendarCreater(selectedDate);
     console.log(allMonth);
 
     return (
         <>
             <div id="calendarContainer">
                 <CalendarHeader />
-                {allMonth && [...allMonth.lastMonth, ...allMonth.currentMonth, ...allMonth.nextMonth].map((allMonth) => (
-                <div className={allMonth.status.isToday ? "testTrue" : "testFalse"} onClick={() => handleSetTimeTable(allMonth.todos, allMonth.date)}>
-                    {allMonth.date.day}
-                    {allMonth.status.isShowLimitActive ? allMonth.limitedTodos && allMonth.limitedTodos.map((limitedTodos) => (
-                        <div className="test">
-                            {limitedTodos}
-                        </div>
-                    )) : allMonth.todos && allMonth.todos.map((todos) => (
-                        <div className="test">
-                            {todos.title}
-                        </div>
-                    ))}
-                </div>
-                ))}
-            </div>
-
-            <div id="entireTimeTableContainer">
-                <OneDayTimeTable todosValue={timeTableValue} selectedDate={timeTableSelectedDate} />
+                <CalendarCells allMonth={allMonth}/>
             </div>
         </>
     )
