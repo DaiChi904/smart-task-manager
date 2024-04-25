@@ -79,11 +79,21 @@
 }
 
 .cellElements_isStartDate_true {
-    color: red;
+    display: flex;
+    justify-content: center;
+    clip-path: polygon(5% 100%, 80% 100%, 95% 50%, 80% 0%, 5% 0%);
+    background-color: green;
+    font-size: 14px;
+    margin-bottom: 1px;
 }
 
 .cellElements_isStartDate_false {
-    color: blue;
+    display: flex;
+    justify-content: center;
+    clip-path: polygon(5% 50%, 15% 100%, 90% 100%, 90% 0%, 15% 0%);
+    background-color: red;
+    font-size: 14px;
+    margin-bottom: 1px;
 }
 
 /* TimeTable */
