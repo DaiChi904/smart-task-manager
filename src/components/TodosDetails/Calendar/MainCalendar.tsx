@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { getLastDay, getLastMonth, getNextMonth, getDayOfWeek } from '../../utils/date';
+import { getLastDay, getLastMonth, getNextMonth, getDayOfWeek } from '../../../utils/date';
 
 import "./MainCalendar.css";
-import OneDayTimeTable from './OneDayTimeTable';
+import OneDayTimeTable from '../OneDayTimeTable';
 import CoreCalendar from './CoreCalendar';
-import { YearMonthType } from '../../types/calendarTypes';
+import { YearMonthType } from '../../../types/calendarTypes';
 
 // Get date of today
 const dateOfToday = new Date();

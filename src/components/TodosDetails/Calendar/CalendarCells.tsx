@@ -1,6 +1,4 @@
-import { todosAtom } from "../Todo/CardCreater";
-import { TodosAtomType } from "../../types/todoTypes";
-import { AllCalendarType, CalendarType, DateType, TodosInfoType } from "../../types/calendarTypes";
+import { AllCalendarType, DateType, TodosInfoType } from "../../../types/calendarTypes";
 
 export default function CalendarCells({allMonth}: {allMonth: AllCalendarType | undefined}) {
 

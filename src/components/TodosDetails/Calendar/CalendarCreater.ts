@@ -1,8 +1,8 @@
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
-import { todosAtom } from "../Todo/CardCreater";
-import { getLastMonth, getLastDay, getDayOfWeek, getNextMonth } from "../../utils/date";
-import { CalendarType, AllCalendarType, DateType, TodosInfoType, YearMonthType, LimitedTodosType } from "../../types/calendarTypes";
+import { todosAtom } from "../../Todo/CardCreater";
+import { getLastMonth, getLastDay, getDayOfWeek, getNextMonth } from "../../../utils/date";
+import { CalendarType, AllCalendarType, DateType, TodosInfoType, YearMonthType, LimitedTodosType } from "../../../types/calendarTypes";
 
 // Get date of today
 const dateOfToday = new Date();
