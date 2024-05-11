@@ -41,4 +41,3 @@ export type YearMonthType = {
     year: number,
     month: number,
 }
-
