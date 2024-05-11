@@ -1,9 +1,9 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 
-import MainCalendar from '../components/Calender/MainCalendar';
+import MainCalendar from '../components/TodosDetails/Calendar/MainCalendar';
 
 import "./Calendar.css";
-import OneDayTimeTable from '../components/Calender/OneDayTimeTable';
+import OneDayTimeTable from '../components/TodosDetails/OneDayTimeTable';
 
 const Tab2: React.FC = () => {
   return (
@@ -19,7 +19,10 @@ const Tab2: React.FC = () => {
             <IonTitle size="large">Tab 2</IonTitle>
           </IonToolbar>
         </IonHeader>
+
           <MainCalendar />
+
+
       </IonContent>
     </IonPage>
   );

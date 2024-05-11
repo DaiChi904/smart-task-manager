@@ -1,15 +1,15 @@
 import { useState } from 'react';
 
 import "./MainCalendar.css";
-import OneDayTimeTable from './OneDayTimeTable';
+import OneDayTimeTable from '../OneDayTimeTable';
 import CalendarCreater from './CalendarCreater';
-import { YearMonthType, TodosInfoType, DateType, AllCalendarType } from '../../types/calendarTypes';
+import { YearMonthType, TodosInfoType, DateType, AllCalendarType } from '../../../types/calendarTypes';
 import CalendarCells from './CalendarCells';
 
 // Get date of today
 const dateOfToday = new Date();
 
-function CoreCalendar({selectedDate}: {selectedDate: YearMonthType}) {
+function CalendarCore({selectedDate}: {selectedDate: YearMonthType}) {
     // Values related to <oneDayTimeTabe />.
     const [timeTableValue, setTimeTableValue] = useState<TodosInfoType[]>([]);
     const [timeTableSelectedDate, setTimeTableSelectedDate] = useState<DateType>({ year: dateOfToday.getFullYear(), month: dateOfToday.getMonth(), day: dateOfToday.getDate(), dayOfWeek: dateOfToday.getDay() });
@@ -36,7 +36,7 @@ function CoreCalendar({selectedDate}: {selectedDate: YearMonthType}) {
     )
 }
 
-export default CoreCalendar;
+export default CalendarCore;
 
 /**
  * Header of calendar
